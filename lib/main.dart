@@ -10,7 +10,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/models/dialog.dart';
 import 'package:scool_home_working/screens/new_task.dart';
-import 'package:scool_home_working/screens/new_update.dart';
 import 'package:scool_home_working/screens/task_list.dart';
 import 'package:scool_home_working/services/app_translations.dart';
 import 'package:scool_home_working/services/notification_service.dart';
