@@ -169,59 +169,6 @@ class _TaskListState extends State<TaskList> {
                     ),
                   ],
                 )
-              /* Container(
-                  width: double.infinity,
-                  height: 70,
-                  margin: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Colors.redAccent,
-                  ),
-                  child: Material(
-                    clipBehavior: Clip.antiAlias,
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: InkWell(
-                      onTap: () async {
-                        setState(() {
-                          for (var element in appController.selectedTasks) {
-                            LocalNoticeService()
-                                .localNotificationsPlugin
-                                .cancel(element.notificationId);
-
-                            appController.tasks.remove(element);
-                          }
-
-                          appController.selectedTasks.clear();
-                        });
-
-                        String encodedData = Task.encode(appController.tasks);
-                        await prefs.setString('task', encodedData);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.delete_rounded,
-                              color: Colors.white, size: 30),
-                          const SizedBox(width: 10.0),
-                          SizedBox(
-                            width: 350,
-                            child: AutoSizeText(
-                              'Удалить выбранные задания (${appController.selectedTasks.length})',
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )*/
               : Container(height: 0),
         ),
         appBar: AppBar(
