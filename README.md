@@ -25,6 +25,6 @@ An application that allows you to record homework, as well as reminders about th
 - flutter_localizations:
    - sdk: flutter
 
-<a href="https://play.google.com/store/apps/details?id=com.revens.scool_home_working"><img src="https://i.imgur.com/wkEMsFQ.png" width="25%" height="25%"></img></a>
+<a href="https://play.google.com/store/apps/details?id=com.revens.scool_home_working"><img src="https://i.imgur.com/oOB3uJW.png" width="25%" height="25%"></img></a>
 
 Help the project: https://www.tinkoff.ru/cf/8WMpKYVakOn
