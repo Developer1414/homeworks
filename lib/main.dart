@@ -146,13 +146,11 @@ class _HomeState extends State<Home> {
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.listCheck),
                 activeIcon: FaIcon(FontAwesomeIcons.listCheck),
-                label: 'Мои задания',
                 tooltip: '',
               ),
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.plus),
                 activeIcon: FaIcon(FontAwesomeIcons.plus),
-                label: 'Новое ДЗ',
                 tooltip: '',
               ),
             ],

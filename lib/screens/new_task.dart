@@ -655,11 +655,6 @@ class _NewTaskState extends State<NewTask> {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
 
-                        /* print(appController.tasks
-                            .where((p0) => p0 == NewTask.taskForChange)
-                            .toList()[0]
-                            .task);*/
-
                         String encodedData = Task.encode(appController.tasks);
 
                         await prefs.setString('task', encodedData);
