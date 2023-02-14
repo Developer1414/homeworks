@@ -2,6 +2,7 @@ class RuTranslations {
   static Map<String, String> get map => {
         'newTask_buttonAdd': 'Добавить',
         'newTask_title': 'Новое задание',
+        'editTask_title': 'Изменить задание',
         'newTask_textFieldSubject': 'Предмет...',
         'newTask_textFieldTask': 'Задание...',
         'newTask_date': 'Задание на',
@@ -15,6 +16,7 @@ class RuTranslations {
         'colorPicker_ButtonApply': 'Применить',
         'systemNotification_Remind': 'Напоминание о задании по предмету',
         'newTask_notificationTaskAdded': 'Задание добавлено!',
+        'newTask_notificationTaskChanged': 'Задание изменено!',
         'newTask_notificationPastTime':
             'Задание должно быть в будущем времени!',
         'newTask_taskEmpty': 'Вы не вписали задание!',
@@ -31,8 +33,8 @@ class RuTranslations {
         'newTask_timePicker_hourLabelText': 'Часы',
         'taskList_NoHomeworks': 'На этот день нет домашних заданий',
         'taskList_Title': 'Задания на',
-        'taskList_ButtonDeleteTask': 'Удалить задание(я)',
-        'taskList_ButtonChangeTask': 'Изменить задание',
+        'taskList_ButtonDeleteTask': 'Удалить',
+        'taskList_ButtonChangeTask': 'Изменить',
         'taskList_ImportantTask': 'ВАЖНОЕ ЗАДАНИЕ',
         'Algebra': 'Алгебра',
         'Astronomy': 'Астрономия',

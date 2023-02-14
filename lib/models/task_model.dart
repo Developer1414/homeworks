@@ -43,8 +43,8 @@ class Task extends GetxController {
         'date': task.date.toString(),
       };
 
-  static String encode(List<Task> musics) => json.encode(
-        musics.map<Map<String, dynamic>>((music) => Task.toMap(music)).toList(),
+  static String encode(List<Task> task) => json.encode(
+        task.map<Map<String, dynamic>>((t) => Task.toMap(t)).toList(),
       );
 
   static List<Task> decode(String val) => (json.decode(val) as List<dynamic>)

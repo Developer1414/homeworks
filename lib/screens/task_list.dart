@@ -24,12 +24,6 @@ class _TaskListState extends State<TaskList> {
 
   List<Task> currentTasks = [];
 
-  Object currentHomeworks() {
-    return appController.tasks.where((p0) =>
-        p0.date ==
-        DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day));
-  }
-
   Future loadTasks() async {
     prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('task')) {
@@ -54,10 +48,6 @@ class _TaskListState extends State<TaskList> {
     setState(() {
       appController.selectedTasks.clear();
     });
-
-    for (var element in appController.tasks) {
-      print(element.task);
-    }
   }
 
   @override
@@ -108,15 +98,23 @@ class _TaskListState extends State<TaskList> {
                                   Task.encode(appController.tasks);
                               await prefs.setString('task', encodedData);
                             },
-                            child: AutoSizeText(
-                              'taskList_ButtonDeleteTask'.tr,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const FaIcon(FontAwesomeIcons.trash,
+                                    color: Colors.white, size: 25),
+                                const SizedBox(width: 10.0),
+                                AutoSizeText(
+                                  'taskList_ButtonDeleteTask'.tr,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.roboto(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -147,21 +145,26 @@ class _TaskListState extends State<TaskList> {
                                       appController.selectedTasks.clear();
                                     });
 
-                                    Get.to(() => const NewTask());
-
-                                    String encodedData =
-                                        Task.encode(appController.tasks);
-                                    await prefs.setString('task', encodedData);
+                                    await Get.to(() => const NewTask());
+                                    setState(() {});
                                   },
-                            child: AutoSizeText(
-                              'taskList_ButtonChangeTask'.tr,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const FaIcon(FontAwesomeIcons.solidPenToSquare,
+                                    color: Colors.white, size: 25),
+                                const SizedBox(width: 10.0),
+                                AutoSizeText(
+                                  'taskList_ButtonChangeTask'.tr,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.roboto(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -181,7 +184,7 @@ class _TaskListState extends State<TaskList> {
             minFontSize: 10,
             style: GoogleFonts.roboto(
               color: Colors.black87,
-              fontSize: 30,
+              fontSize: 28,
               fontWeight: FontWeight.w900,
             ),
           ),

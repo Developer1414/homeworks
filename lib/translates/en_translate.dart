@@ -2,6 +2,7 @@ class EnTranslations {
   static Map<String, String> get map => {
         'newTask_buttonAdd': 'Add',
         'newTask_title': 'New task',
+        'editTask_title': 'Edit task',
         'newTask_textFieldSubject': 'Subject...',
         'newTask_textFieldTask': 'Task...',
         'newTask_date': 'Task for',
@@ -16,6 +17,7 @@ class EnTranslations {
         'systemNotification_Remind':
             'Reminder of the task in the subject of the',
         'newTask_notificationTaskAdded': 'Task added!',
+        'newTask_notificationTaskChanged': 'Task edited!',
         'newTask_notificationPastTime':
             'The assignment must be in the future tense!',
         'newTask_taskEmpty': 'You didn\'t write the assignment!',
@@ -32,8 +34,8 @@ class EnTranslations {
         'newTask_timePicker_hourLabelText': 'Hours',
         'taskList_NoHomeworks': 'No homeworks for this day',
         'taskList_Title': 'Tasks for',
-        'taskList_ButtonDeleteTask': 'Delete task(s)',
-        'taskList_ButtonChangeTask': 'Change task',
+        'taskList_ButtonDeleteTask': 'Delete',
+        'taskList_ButtonChangeTask': 'Edit',
         'taskList_ImportantTask': 'IMPORTANT TASK',
         'Algebra': 'Algebra',
         'Astronomy': 'Astronomy',
