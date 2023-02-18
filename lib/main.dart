@@ -1,4 +1,3 @@
-import 'package:appodeal_flutter/appodeal_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,22 +15,19 @@ import 'package:scool_home_working/services/notification_service.dart';
 import 'dart:ui' as ui;
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Appodeal.setAppKeys(
-    androidAppKey: '1f3a950d6bd222ab56f499d2fd8f0217a2e6fd7f415147a4',
-  );
-
-  await Appodeal.initialize(
-    hasConsent: true,
-    adTypes: [
-      AdType.mrec,
-      AdType.interstitial,
-    ],
-    verbose: true,
-  );
+  Appodeal.initialize(
+      appKey: "1f3a950d6bd222ab56f499d2fd8f0217a2e6fd7f415147a4",
+      adTypes: [
+        AppodealAdType.Interstitial,
+        AppodealAdType.Banner,
+        AppodealAdType.MREC
+      ],
+      onInitializationFinished: (errors) => {});
 
   await LocalNoticeService().setup();
 

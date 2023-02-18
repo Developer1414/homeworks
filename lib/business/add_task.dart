@@ -20,7 +20,7 @@ Future addNewTask(
     required Color pickerColor}) async {
   final AppController appController = Get.find();
 
-  if (isNotificationEnable) {
+  if (isNotificationEnable && !appController.isHomeworksPro.value) {
     await AdController().showInterstitialAd(() {});
   }
 

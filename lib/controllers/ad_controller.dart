@@ -1,13 +1,14 @@
-import 'package:appodeal_flutter/appodeal_flutter.dart';
+import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 class AdController {
   Future showInterstitialAd(Function func) async {
-    Appodeal.show(AdType.interstitial);
+    //Appodeal.setInterstitialCallbacks(onInterstitialShown: () => func.call());
 
-    Appodeal.setInterstitialCallback((event) {
-      if (event == 'onInterstitialShown') {
-        func.call();
-      }
-    });
+    var isCanShow = await Appodeal.canShow(AppodealAdType.Interstitial);
+    var isLoaded = await Appodeal.isLoaded(AppodealAdType.Interstitial);
+
+    if (isCanShow && isLoaded) {
+      Appodeal.show(AppodealAdType.Interstitial);
+    }
   }
 }

@@ -22,7 +22,6 @@ class EnTranslations {
             'The assignment must be in the future tense!',
         'newTask_taskEmpty': 'You didn\'t write the assignment!',
         'newTask_subjectEmpty': 'You did not write the name of the subject!',
-        'newTask_Donations': 'Donations to developer',
         'newTask_timeAt': 'at',
         'newTask_datePicker_helpText': 'Pick a date',
         'newTask_datePicker_cancelText': 'Cancel',
@@ -32,6 +31,11 @@ class EnTranslations {
         'newTask_timePicker_helpText': 'Pick a time',
         'newTask_timePicker_minuteLabelText': 'Minutes',
         'newTask_timePicker_hourLabelText': 'Hours',
+        'newTask_remainingTasks': 'Remaining',
+        'newTask_lastZeroTasks':
+            'As you do not have the Pro version of the app connected, you can only record 5 tasks per date.',
+        'newTask_lastZeroNotifications':
+            'As you do not have the Pro version of the app connected, you can only set notifications for 3 tasks.',
         'taskList_NoHomeworks': 'No homeworks for this day',
         'taskList_Title': 'Tasks for',
         'taskList_ButtonDeleteTask': 'Delete',
@@ -78,5 +82,17 @@ class EnTranslations {
         'newUpdate_textInstalling': 'Installing...',
         'newUpdate_textUpdateIsAvailable': 'New update available!',
         'newUpdate_Title': 'New update',
+        'proOverview_noAdTitle': 'No ads',
+        'proOverview_noAdSubtitle': 'No more ads - just your content!',
+        'proOverview_infinityTasksTitle': 'An unlimited number of tasks',
+        'proOverview_infinityTasksSubtitle': 'Add as many tasks as you want!',
+        'proOverview_infinityNotificationsTitle': 'Unlimited reminders',
+        'proOverview_infinityNotificationsSubtitle':
+            'Create unlimited reminders!',
+        'proOverview_month': 'month',
+        'proOverview_buttonConnect': 'Connect',
+        'proOverview_userAgreementWarn': 'By connecting, you agree to the',
+        'proOverview_userAgreement': 'User Agreement',
+        'proOverview_userAgreementTitle': 'User Agreement',
       };
 }

@@ -21,7 +21,6 @@ class RuTranslations {
             'Задание должно быть в будущем времени!',
         'newTask_taskEmpty': 'Вы не вписали задание!',
         'newTask_subjectEmpty': 'Вы не вписали название предмета!',
-        'newTask_Donations': 'Пожертвования разработчику',
         'newTask_timeAt': 'в',
         'newTask_datePicker_helpText': 'Выберите дату',
         'newTask_datePicker_cancelText': 'Отмена',
@@ -31,6 +30,11 @@ class RuTranslations {
         'newTask_timePicker_helpText': 'Выберите время',
         'newTask_timePicker_minuteLabelText': 'Минуты',
         'newTask_timePicker_hourLabelText': 'Часы',
+        'newTask_remainingTasks': 'Осталось',
+        'newTask_lastZeroTasks':
+            'Поскольку у Вас не подключена Pro-версия приложения, Вы можете записывать только 5 задач на одну дату.',
+        'newTask_lastZeroNotifications':
+            'Поскольку у вас не подключена Pro-версия приложения, вы можете установить уведомления только для 3-х задач.',
         'taskList_NoHomeworks': 'На этот день нет домашних заданий',
         'taskList_Title': 'Задания на',
         'taskList_ButtonDeleteTask': 'Удалить',
@@ -77,5 +81,20 @@ class RuTranslations {
         'newUpdate_textInstalling': 'Установка...',
         'newUpdate_textUpdateIsAvailable': 'Доступно новое обновление!',
         'newUpdate_Title': 'Новое обновление',
+        'proOverview_noAdTitle': 'Нет рекламы',
+        'proOverview_noAdSubtitle':
+            'Больше никакой рекламы - только ваш контент!',
+        'proOverview_infinityTasksTitle': 'Неограниченное количество задач',
+        'proOverview_infinityTasksSubtitle':
+            'Добавляйте столько задач, сколько нужно!',
+        'proOverview_infinityNotificationsTitle':
+            'Неограниченное количество напоминаний',
+        'proOverview_infinityNotificationsSubtitle':
+            'Создавайте неограниченное количество напоминаний!',
+        'proOverview_month': 'месяц',
+        'proOverview_buttonConnect': 'Подключить',
+        'proOverview_userAgreementWarn': 'Подключаясь, Вы соглашаетесь с',
+        'proOverview_userAgreement': 'Пользовательским Соглашением',
+        'proOverview_userAgreementTitle': 'Пользовательское Соглашение',
       };
 }

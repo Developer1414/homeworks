@@ -9,6 +9,7 @@ import 'package:scool_home_working/models/task_model.dart';
 import 'package:scool_home_working/screens/new_task.dart';
 import 'package:scool_home_working/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 class TaskList extends StatefulWidget {
   const TaskList({super.key});
@@ -104,14 +105,17 @@ class _TaskListState extends State<TaskList> {
                                 const FaIcon(FontAwesomeIcons.trash,
                                     color: Colors.white, size: 25),
                                 const SizedBox(width: 10.0),
-                                AutoSizeText(
-                                  'taskList_ButtonDeleteTask'.tr,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.roboto(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                                Flexible(
+                                  child: AutoSizeText(
+                                    'taskList_ButtonDeleteTask'.tr,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.roboto(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -154,14 +158,17 @@ class _TaskListState extends State<TaskList> {
                                 const FaIcon(FontAwesomeIcons.solidPenToSquare,
                                     color: Colors.white, size: 25),
                                 const SizedBox(width: 10.0),
-                                AutoSizeText(
-                                  'taskList_ButtonChangeTask'.tr,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.roboto(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                                Flexible(
+                                  child: AutoSizeText(
+                                    'taskList_ButtonChangeTask'.tr,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.roboto(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -172,7 +179,14 @@ class _TaskListState extends State<TaskList> {
                     ),
                   ],
                 )
-              : Container(height: 0),
+              : appController.isHomeworksPro.value
+                  ? Container(height: 0.0)
+                  : const Padding(
+                      padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
+                      child: AppodealBanner(
+                          adSize: AppodealBannerSize.BANNER,
+                          placement: "default"),
+                    ),
         ),
         appBar: AppBar(
           elevation: 0,
