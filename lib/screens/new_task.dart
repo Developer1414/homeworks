@@ -8,12 +8,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:scool_home_working/business/add_task.dart';
-import 'package:scool_home_working/models/button_model.dart';
 import 'package:scool_home_working/models/dialog.dart';
 import 'package:scool_home_working/models/task_model.dart';
 import 'package:scool_home_working/screens/subscription_overview.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 import '../controllers/app_controller.dart';
 
@@ -32,6 +30,7 @@ class _NewTaskState extends State<NewTask> {
   final AppController appController = Get.find();
 
   bool isNotificationEnable = false;
+  bool isWarningEnable = false;
   bool isImportantTaskEnable = false;
 
   final TextEditingController titleController = TextEditingController();
@@ -90,6 +89,7 @@ class _NewTaskState extends State<NewTask> {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
+      locale: Get.locale,
       helpText: 'newTask_datePicker_helpText'.tr,
       cancelText: 'newTask_datePicker_cancelText'.tr,
       confirmText: 'newTask_datePicker_confirmText'.tr,
@@ -130,6 +130,8 @@ class _NewTaskState extends State<NewTask> {
       isImportantTaskEnable = NewTask.taskForChange!.importantTask;
       pickerColor = NewTask.taskForChange!.taskTitleColor;
     }
+
+    setState(() {});
   }
 
   void dismissKeyboardFocus() {
@@ -198,8 +200,11 @@ class _NewTaskState extends State<NewTask> {
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                       ),
-                      onPressed: () =>
-                          Get.to(() => const SubcriptionOverview()),
+                      onPressed: () {
+                        Get.to(() => const SubcriptionOverview());
+                        /*appController.isHomeworksPro.toggle();*/
+                        setState(() {});
+                      },
                       child: AutoSizeText(
                         'Homeworks Pro',
                         maxLines: 1,
@@ -218,6 +223,32 @@ class _NewTaskState extends State<NewTask> {
             ),
             body: ListView(
               children: [
+                Visibility(
+                  visible:
+                      !appController.isHomeworksPro.value || isWarningEnable,
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, bottom: 15.0),
+                    decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.2),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 255, 164, 0),
+                            width: 2.5),
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: AutoSizeText(
+                        'newTask_notConnectedHomeworksProWarning'.tr,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.roboto(
+                            color: Colors.black87.withOpacity(0.7),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                ),
                 Row(
                   children: [
                     Expanded(
@@ -331,80 +362,59 @@ class _NewTaskState extends State<NewTask> {
                       border: Border.all(
                           color: Colors.black87.withOpacity(0.4), width: 2.5),
                       borderRadius: BorderRadius.circular(15.0)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 15.0, left: 15.0, bottom: 5.0),
-                                child: Text(
-                                  '${'newTask_date'.tr} ${DateFormat.MMMMd(ui.window.locale.toString()).format(selectedDate!)}',
-                                  style: GoogleFonts.roboto(
-                                      color: Colors.black87.withOpacity(0.7),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                              appController.isHomeworksPro.value
-                                  ? Container()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 15.0, left: 15.0),
-                                      child: Text(
-                                        '${'newTask_remainingTasks'.tr}: ${getNumberOfRemainingTasks()} / 5',
-                                        style: GoogleFonts.roboto(
-                                            color:
-                                                Colors.black87.withOpacity(0.7),
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(right: 5.0, top: 5.0),
-                            child: IconButton(
-                                padding: EdgeInsets.zero,
-                                splashRadius: 25.0,
-                                onPressed: () async {
-                                  dismissKeyboardFocus();
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, top: 5.0, bottom: 5.0, right: 5.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const FaIcon(FontAwesomeIcons.solidFlag,
+                                size: 20.0, color: Colors.green),
+                            const SizedBox(width: 10.0),
+                            Text(
+                              '${'newTask_date'.tr} ${DateFormat.MMMMd(ui.window.locale.toString()).format(selectedDate!)}',
+                              style: GoogleFonts.roboto(
+                                  color: Colors.black87.withOpacity(0.7),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 25.0,
+                            onPressed: () async {
+                              dismissKeyboardFocus();
 
-                                  DateTime? date = await showDatePicker(
-                                    context: context,
-                                    initialDate: selectedDate ?? DateTime.now(),
-                                    firstDate: DateTime(2022),
-                                    lastDate: DateTime(2100),
-                                    helpText: 'newTask_datePicker_helpText'.tr,
-                                    cancelText:
-                                        'newTask_datePicker_cancelText'.tr,
-                                    confirmText:
-                                        'newTask_datePicker_confirmText'.tr,
-                                    fieldLabelText:
-                                        'newTask_datePicker_fieldLabelText'.tr,
-                                    fieldHintText:
-                                        'newTask_datePicker_fieldHintText'.tr,
-                                  );
+                              DateTime? date = await showDatePicker(
+                                context: context,
+                                initialDate: selectedDate ?? DateTime.now(),
+                                firstDate: DateTime(2022),
+                                lastDate: DateTime(2100),
+                                locale: Get.locale,
+                                helpText: 'newTask_datePicker_helpText'.tr,
+                                cancelText: 'newTask_datePicker_cancelText'.tr,
+                                confirmText:
+                                    'newTask_datePicker_confirmText'.tr,
+                                fieldLabelText:
+                                    'newTask_datePicker_fieldLabelText'.tr,
+                                fieldHintText:
+                                    'newTask_datePicker_fieldHintText'.tr,
+                              );
 
-                                  selectedDate = date ?? selectedDate;
+                              selectedDate = date ?? selectedDate;
 
-                                  setState(() {});
-                                },
-                                icon: const FaIcon(
-                                    FontAwesomeIcons.solidCalendarDays,
-                                    color: Colors.indigoAccent,
-                                    size: 30)),
-                          ),
-                        ],
-                      ),
-                    ],
+                              setState(() {});
+                            },
+                            icon: const FaIcon(
+                                FontAwesomeIcons.solidCalendarDays,
+                                color: Colors.indigoAccent,
+                                size: 30)),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -438,7 +448,7 @@ class _NewTaskState extends State<NewTask> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                            right: 15.0, top: 15.0, bottom: 15.0),
+                            right: 8.0, top: 8.0, bottom: 8.0),
                         child: FlutterSwitch(
                           activeColor: Colors.green,
                           width: 85.0,
@@ -464,94 +474,87 @@ class _NewTaskState extends State<NewTask> {
                       border: Border.all(
                           color: Colors.black87.withOpacity(0.4), width: 2.5),
                       borderRadius: BorderRadius.circular(15.0)),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 15.0, bottom: 5.0, left: 15.0),
-                                child: Row(
-                                  children: [
-                                    const FaIcon(FontAwesomeIcons.solidBell,
-                                        size: 20.0, color: Colors.redAccent),
-                                    const SizedBox(width: 10.0),
-                                    AutoSizeText(
-                                      '${'newTask_Remind'.tr}:',
-                                      maxLines: 2,
-                                      style: GoogleFonts.roboto(
-                                          color:
-                                              Colors.black87.withOpacity(0.7),
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              appController.isHomeworksPro.value
-                                  ? Container()
-                                  : Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: !isNotificationEnable
-                                              ? 15.0
-                                              : 0.0,
-                                          left: 15.0),
-                                      child: Text(
-                                        '${'newTask_remainingTasks'.tr}: ${getNumberOfRemainingNotifications()} / 3',
-                                        style: GoogleFonts.roboto(
-                                            color:
-                                                Colors.black87.withOpacity(0.7),
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: 15.0,
-                              top: 15.0,
-                              bottom: !isNotificationEnable ? 15.0 : 0.0,
-                            ),
-                            child: FlutterSwitch(
-                              activeColor: Colors.green,
-                              width: 85.0,
-                              height: 40.0,
-                              toggleSize: 30.0,
-                              value: isNotificationEnable,
-                              borderRadius: 30.0,
-                              padding: 6.0,
-                              onToggle: (val) {
-                                setState(() {
-                                  isNotificationEnable = val;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Visibility(
-                        visible: isNotificationEnable,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
-                              child: Text(
-                                '${'newTask_Remind'.tr} ${DateFormat.MMMMd(Get.deviceLocale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
+                              const FaIcon(FontAwesomeIcons.solidBell,
+                                  size: 20.0, color: Colors.redAccent),
+                              const SizedBox(width: 10.0),
+                              AutoSizeText(
+                                '${'newTask_Remind'.tr}:',
+                                maxLines: 2,
                                 style: GoogleFonts.roboto(
                                     color: Colors.black87.withOpacity(0.7),
                                     fontSize: 20,
                                     fontWeight: FontWeight.w700),
                               ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: FlutterSwitch(
+                            activeColor: Colors.green,
+                            width: 85.0,
+                            height: 40.0,
+                            toggleSize: 30.0,
+                            value: isNotificationEnable,
+                            borderRadius: 30.0,
+                            padding: 6.0,
+                            onToggle: (val) {
+                              setState(() {
+                                isNotificationEnable = val;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: isNotificationEnable,
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, bottom: 15.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.black87.withOpacity(0.4), width: 2.5),
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 15.0),
+                              child: SizedBox(
+                                width: 350.0,
+                                child: AutoSizeText(
+                                  '${'newTask_Remind'.tr} ${DateFormat.MMMMd(Get.deviceLocale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
+                                  minFontSize: 10,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.roboto(
+                                      color: Colors.black87.withOpacity(0.7),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(right: 15.0),
+                              padding: const EdgeInsets.only(
+                                  right: 15.0, top: 5.0, bottom: 5.0),
                               child: SizedBox(
                                 height: 50,
                                 width: 35,
@@ -565,29 +568,29 @@ class _NewTaskState extends State<NewTask> {
                                     icon: const FaIcon(
                                         FontAwesomeIcons.solidCalendarDays,
                                         color: Colors.indigoAccent,
-                                        size: 25)),
+                                        size: 30)),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      Visibility(
-                        visible: isNotificationEnable,
-                        child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15.0, right: 15.0, bottom: 15.0),
-                            child: AutoSizeText(
-                              'newTask_Warning'.tr,
-                              maxLines: 2,
-                              minFontSize: 5,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                  color: Colors.black87.withOpacity(0.4),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700),
-                            )),
-                      ),
-                    ],
+                        Visibility(
+                          visible: !appController.isHomeworksPro.value,
+                          child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 15.0, bottom: 15.0),
+                              child: AutoSizeText(
+                                'newTask_Warning'.tr,
+                                maxLines: 2,
+                                minFontSize: 5,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    color: Colors.black87.withOpacity(0.4),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700),
+                              )),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -604,29 +607,35 @@ class _NewTaskState extends State<NewTask> {
                         ),
                       ),
                       onPressed: () async {
-                        if (NewTask.taskForChange == null) {
-                          if (getNumberOfRemainingTasks() == 0) {
-                            Get.to(() => const SubcriptionOverview());
+                        if (!appController.isHomeworksPro.value) {
+                          if (NewTask.taskForChange == null) {
+                            if (getNumberOfRemainingTasks() == 0) {
+                              Get.to(() => const SubcriptionOverview());
 
-                            dialog(
-                                title: 'notification_TitleError'.tr,
-                                content: 'newTask_lastZeroTasks'.tr,
-                                isError: true);
+                              dialog(
+                                  title: 'notification_TitleError'.tr,
+                                  content:
+                                      'newTask_notConnectedHomeworksProWarning'
+                                          .tr,
+                                  isError: true);
 
-                            return;
+                              return;
+                            }
                           }
-                        }
 
-                        if (isNotificationEnable) {
-                          if (getNumberOfRemainingNotifications() == 0) {
-                            Get.to(() => const SubcriptionOverview());
+                          if (isNotificationEnable) {
+                            if (getNumberOfRemainingNotifications() == 0) {
+                              Get.to(() => const SubcriptionOverview());
 
-                            dialog(
-                                title: 'notification_TitleError'.tr,
-                                content: 'newTask_lastZeroNotifications'.tr,
-                                isError: true);
+                              dialog(
+                                  title: 'notification_TitleError'.tr,
+                                  content:
+                                      'newTask_notConnectedHomeworksProWarning'
+                                          .tr,
+                                  isError: true);
 
-                            return;
+                              return;
+                            }
                           }
                         }
 
@@ -716,7 +725,7 @@ class _NewTaskState extends State<NewTask> {
                   ),
                 ),
                 appController.isHomeworksPro.value
-                    ? Container()
+                    ? Container(height: 0.0)
                     : const Padding(
                         padding: EdgeInsets.only(bottom: 15.0),
                         child: AppodealBanner(

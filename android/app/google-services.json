@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "947901140367",
+    "project_id": "homeworks-6924d",
+    "storage_bucket": "homeworks-6924d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947901140367:android:6e9ca77e4e126f52c38ffa",
+        "android_client_info": {
+          "package_name": "com.revens.scool_home_working"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "947901140367-p9mpiqp8mkfbqan586tbpg9e4t3k0d74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG_nJ5XK7YFFGQ-fBJCvJJ0gD4h6bH6e4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "947901140367-p9mpiqp8mkfbqan586tbpg9e4t3k0d74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

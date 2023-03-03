@@ -1,12 +1,15 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
+import 'package:scool_home_working/firebase_options.dart';
 import 'package:scool_home_working/models/dialog.dart';
 import 'package:scool_home_working/screens/new_task.dart';
 import 'package:scool_home_working/screens/task_list.dart';
@@ -19,6 +22,13 @@ import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  AppMetrica.activate(
+      const AppMetricaConfig("1c4c46c4-2c6b-405c-8475-4dee61677738"));
 
   Appodeal.initialize(
       appKey: "1f3a950d6bd222ab56f499d2fd8f0217a2e6fd7f415147a4",
@@ -33,8 +43,9 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) {
-    initializeDateFormatting(Get.deviceLocale.toString(), null)
-        .then((value) => runApp(const MyApp()));
+    /*initializeDateFormatting(Get.deviceLocale.toString(), null)
+        .then((value) => runApp(const MyApp()));*/
+    runApp(const MyApp());
   });
 }
 
@@ -120,6 +131,15 @@ class _HomeState extends State<Home> {
     final AppController appController = Get.find();
 
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('ru', 'RU'),
+        Locale('en', 'US'),
+      ],
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         bottomNavigationBar: Obx(

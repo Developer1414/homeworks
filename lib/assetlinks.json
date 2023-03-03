@@ -1,0 +1,11 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.revens.scool_home_working",
+      "sha256_cert_fingerprints":
+        ["54:BF:85:CA:94:DE:B7:A3:DD:8B:8E:33:60:F1:AD:00:D7:60:9A:7A:6D:1E:EA:CD:9C:E0:42:79:30:FC:AD:27"]
+    }
+  }
+]

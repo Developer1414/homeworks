@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/models/task_model.dart';
 import 'package:scool_home_working/screens/new_task.dart';
+import 'package:scool_home_working/screens/task_details.dart';
 import 'package:scool_home_working/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
@@ -214,6 +215,7 @@ class _TaskListState extends State<TaskList> {
                       initialDate: selectedDate ?? DateTime.now(),
                       firstDate: DateTime(2022),
                       lastDate: DateTime(2100),
+                      locale: Get.locale,
                       helpText: 'newTask_datePicker_helpText'.tr,
                       cancelText: 'newTask_datePicker_cancelText'.tr,
                       confirmText: 'newTask_datePicker_confirmText'.tr,
@@ -263,14 +265,17 @@ class _TaskListState extends State<TaskList> {
                     const SizedBox(height: 15.0),
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                    padding: EdgeInsets.only(
+                        left: 15.0,
+                        right: 15.0,
+                        bottom: index + 1 == currentTasks.length ? 15.0 : 0.0),
                     child: Material(
                       clipBehavior: Clip.antiAlias,
                       borderRadius: BorderRadius.circular(15.0),
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          setState(() {
+                          /*setState(() {
                             if (!appController.selectedTasks
                                 .contains(currentTasks[index])) {
                               appController.selectedTasks
@@ -279,7 +284,11 @@ class _TaskListState extends State<TaskList> {
                               appController.selectedTasks
                                   .remove(currentTasks[index]);
                             }
-                          });
+                          });*/
+                          Get.to(() => TaskDetails(
+                              taskId: currentTasks[index]
+                                  .notificationId
+                                  .toString()));
                         },
                         child: Container(
                             decoration: BoxDecoration(

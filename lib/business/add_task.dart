@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scool_home_working/controllers/ad_controller.dart';
@@ -69,6 +70,9 @@ Future addNewTask(
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String encodedData = Task.encode(appController.tasks.toList());
   await prefs.setString('task', encodedData);
+
+  AppMetrica.reportEvent('ImportantTask: $isImportantTaskEnable');
+  AppMetrica.reportEvent('NotifyTask: $isNotificationEnable');
 
   if (NewTask.taskForChange == null) {
     dialog(

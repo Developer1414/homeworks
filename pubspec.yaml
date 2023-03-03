@@ -46,10 +46,17 @@ dependencies:
   url_launcher: ^6.1.5
   font_awesome_flutter: ^10.3.0
   syncfusion_flutter_datepicker: ^20.3.58
+  yookassa_payments_flutter: ^1.0.3
   in_app_review: ^2.0.6
   pdfx: ^2.3.0
-  flutter_localizations:
+  flutter_localizations: 
     sdk: flutter
+  appmetrica_plugin: ^1.1.0
+  http: ^0.13.5
+  firebase_core: ^2.7.0
+  firebase_auth: ^4.2.9
+  cloud_firestore: ^4.4.3
+  uni_links: ^0.5.1
 
 dev_dependencies:
   flutter_test:

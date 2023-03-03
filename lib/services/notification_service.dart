@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:scool_home_working/screens/task_details.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
 
@@ -13,11 +13,18 @@ class LocalNoticeService {
 
     const initSettings = InitializationSettings(android: androidSetting);
 
-    await localNotificationsPlugin.initialize(initSettings).then((_) {
+    await localNotificationsPlugin
+        .initialize(initSettings,
+            onDidReceiveNotificationResponse: (value) => handlePress(value))
+        .then((_) {
       debugPrint('setupPlugin: setup success');
     }).catchError((Object error) {
       debugPrint('Error: $error');
     });
+  }
+
+  void handlePress(NotificationResponse value) {
+    Get.to(() => TaskDetails(taskId: value.payload!));
   }
 
   Future<void> addNotification(
@@ -42,6 +49,7 @@ class LocalNoticeService {
       body,
       scheduleTime,
       noticeDetail,
+      payload: id.toString(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,

@@ -11,6 +11,7 @@ class EnTranslations {
         'newTask_Warning':
             'If the reminder is enabled, then after clicking on the "Add" button, an advertisement will be played, after which your task will be added.',
         'notification_TitleError': 'Error',
+        'notification_TitleCongratulations': 'Congratulations!',
         'notification_TitleNotification': 'Notification',
         'colorPicker_Title': 'Subject color:',
         'colorPicker_ButtonApply': 'Apply',
@@ -32,10 +33,8 @@ class EnTranslations {
         'newTask_timePicker_minuteLabelText': 'Minutes',
         'newTask_timePicker_hourLabelText': 'Hours',
         'newTask_remainingTasks': 'Remaining',
-        'newTask_lastZeroTasks':
-            'As you do not have the Pro version of the app connected, you can only record 5 tasks per date.',
-        'newTask_lastZeroNotifications':
-            'As you do not have the Pro version of the app connected, you can only set notifications for 3 tasks.',
+        'newTask_notConnectedHomeworksProWarning':
+            'As you do not have Homeworks Pro connected, you can only add 5 tasks and 3 reminders per date.',
         'taskList_NoHomeworks': 'No homeworks for this day',
         'taskList_Title': 'Tasks for',
         'taskList_ButtonDeleteTask': 'Delete',
@@ -87,12 +86,21 @@ class EnTranslations {
         'proOverview_infinityTasksTitle': 'An unlimited number of tasks',
         'proOverview_infinityTasksSubtitle': 'Add as many tasks as you want!',
         'proOverview_infinityNotificationsTitle': 'Unlimited reminders',
+        'proOverview_checkPaymentSberbank':
+            'You should receive a push notification from Sberbank to confirm payment. If not, please go to the Sberbank app or website and check the confirmation in the notifications.',
         'proOverview_infinityNotificationsSubtitle':
             'Create unlimited reminders!',
+        'proOverview_newFeauteresTitle': 'New features',
+        'proOverview_newFeauteresSubtitle':
+            'You will be one of the first to test new features!',
         'proOverview_month': 'month',
         'proOverview_buttonConnect': 'Connect',
         'proOverview_userAgreementWarn': 'By connecting, you agree to the',
         'proOverview_userAgreement': 'User Agreement',
         'proOverview_userAgreementTitle': 'User Agreement',
+        'proOverview_homeworksProConnected':
+            'You have successfully connected Homeworks Pro!',
+        'proOverview_notificationErrorCanceled':
+            'The purchase could not be completed. Please try again later. {cancelled}',
       };
 }

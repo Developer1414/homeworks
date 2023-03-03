@@ -11,6 +11,7 @@ class RuTranslations {
         'newTask_Warning':
             'Если включено напоминание, то после нажатия на кнопку «Добавить» воспроизведётся реклама, после чего Ваше задание будет добавлено.',
         'notification_TitleError': 'Ошибка',
+        'notification_TitleCongratulations': 'Поздравляем!',
         'notification_TitleNotification': 'Уведомление',
         'colorPicker_Title': 'Цвет предмета:',
         'colorPicker_ButtonApply': 'Применить',
@@ -31,10 +32,8 @@ class RuTranslations {
         'newTask_timePicker_minuteLabelText': 'Минуты',
         'newTask_timePicker_hourLabelText': 'Часы',
         'newTask_remainingTasks': 'Осталось',
-        'newTask_lastZeroTasks':
-            'Поскольку у Вас не подключена Pro-версия приложения, Вы можете записывать только 5 задач на одну дату.',
-        'newTask_lastZeroNotifications':
-            'Поскольку у вас не подключена Pro-версия приложения, вы можете установить уведомления только для 3-х задач.',
+        'newTask_notConnectedHomeworksProWarning':
+            'Поскольку у Вас не подключен Homeworks Pro, Вы можете добавить только 5 заданий и 3 напоминания на одну дату.',
         'taskList_NoHomeworks': 'На этот день нет домашних заданий',
         'taskList_Title': 'Задания на',
         'taskList_ButtonDeleteTask': 'Удалить',
@@ -91,10 +90,20 @@ class RuTranslations {
             'Неограниченное количество напоминаний',
         'proOverview_infinityNotificationsSubtitle':
             'Создавайте неограниченное количество напоминаний!',
+        'proOverview_newFeauteresTitle': 'Новые функции',
+        'proOverview_newFeauteresSubtitle':
+            'Вы будете одним из первых, кто протестирует новые функции!',
         'proOverview_month': 'месяц',
         'proOverview_buttonConnect': 'Подключить',
+        'proOverview_checkPayment': 'Проверка оплаты...',
+        'proOverview_checkPaymentSberbank':
+            'Вы должны получить push-уведомление от Сбербанка для подтверждения платежа. Если этого не произошло, зайдите в приложение или на сайт Сбербанка и проверьте подтверждение в уведомлениях.',
         'proOverview_userAgreementWarn': 'Подключаясь, Вы соглашаетесь с',
         'proOverview_userAgreement': 'Пользовательским Соглашением',
         'proOverview_userAgreementTitle': 'Пользовательское Соглашение',
+        'proOverview_homeworksProConnected':
+            'Вы успешно подключили Homeworks Pro!',
+        'proOverview_notificationErrorCanceled':
+            'Не удалось завершить покупку. Пожалуйста, повторите попытку позже. {cancelled}',
       };
 }
