@@ -102,5 +102,6 @@ class EnTranslations {
             'You have successfully connected Homeworks Pro!',
         'proOverview_notificationErrorCanceled':
             'The purchase could not be completed. Please try again later. {cancelled}',
+        'taskDetail_title': 'Reminder',
       };
 }

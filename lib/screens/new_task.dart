@@ -169,7 +169,8 @@ class _NewTaskState extends State<NewTask> {
                           splashRadius: 25.0,
                           onPressed: () {
                             NewTask.taskForChange = null;
-                            Get.back();
+                            Navigator.of(context).pop();
+                            setState(() {});
                           },
                           icon: const FaIcon(FontAwesomeIcons.arrowLeft,
                               color: Colors.black87, size: 30)),
@@ -202,8 +203,6 @@ class _NewTaskState extends State<NewTask> {
                       ),
                       onPressed: () {
                         Get.to(() => const SubcriptionOverview());
-                        /*appController.isHomeworksPro.toggle();*/
-                        setState(() {});
                       },
                       child: AutoSizeText(
                         'Homeworks Pro',
@@ -223,28 +222,29 @@ class _NewTaskState extends State<NewTask> {
             ),
             body: ListView(
               children: [
-                Visibility(
-                  visible:
-                      !appController.isHomeworksPro.value || isWarningEnable,
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                        left: 15.0, right: 15.0, bottom: 15.0),
-                    decoration: BoxDecoration(
-                        color: Colors.orange.withOpacity(0.2),
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 255, 164, 0),
-                            width: 2.5),
-                        borderRadius: BorderRadius.circular(15.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: AutoSizeText(
-                        'newTask_notConnectedHomeworksProWarning'.tr,
-                        minFontSize: 10,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.roboto(
-                            color: Colors.black87.withOpacity(0.7),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700),
+                Obx(
+                  () => Visibility(
+                    visible: !appController.isHomeworksPro.value,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                          left: 15.0, right: 15.0, bottom: 15.0),
+                      decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.2),
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 255, 164, 0),
+                              width: 2.5),
+                          borderRadius: BorderRadius.circular(15.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: AutoSizeText(
+                          'newTask_notConnectedHomeworksProWarning'.tr,
+                          minFontSize: 10,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.roboto(
+                              color: Colors.black87.withOpacity(0.7),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700),
+                        ),
                       ),
                     ),
                   ),
@@ -573,21 +573,23 @@ class _NewTaskState extends State<NewTask> {
                             ),
                           ],
                         ),
-                        Visibility(
-                          visible: !appController.isHomeworksPro.value,
-                          child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 15.0, right: 15.0, bottom: 15.0),
-                              child: AutoSizeText(
-                                'newTask_Warning'.tr,
-                                maxLines: 2,
-                                minFontSize: 5,
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.roboto(
-                                    color: Colors.black87.withOpacity(0.4),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
-                              )),
+                        Obx(
+                          () => Visibility(
+                            visible: !appController.isHomeworksPro.value,
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15.0, right: 15.0, bottom: 15.0),
+                                child: AutoSizeText(
+                                  'newTask_Warning'.tr,
+                                  maxLines: 2,
+                                  minFontSize: 5,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.roboto(
+                                      color: Colors.black87.withOpacity(0.4),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700),
+                                )),
+                          ),
                         ),
                       ],
                     ),
@@ -724,14 +726,16 @@ class _NewTaskState extends State<NewTask> {
                     ),
                   ),
                 ),
-                appController.isHomeworksPro.value
-                    ? Container(height: 0.0)
-                    : const Padding(
-                        padding: EdgeInsets.only(bottom: 15.0),
-                        child: AppodealBanner(
-                            adSize: AppodealBannerSize.BANNER,
-                            placement: "default"),
-                      )
+                Obx(
+                  () => appController.isHomeworksPro.value
+                      ? Container(height: 0.0)
+                      : const Padding(
+                          padding: EdgeInsets.only(bottom: 15.0),
+                          child: AppodealBanner(
+                              adSize: AppodealBannerSize.BANNER,
+                              placement: "default"),
+                        ),
+                )
               ],
             ),
           ),

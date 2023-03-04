@@ -105,5 +105,6 @@ class RuTranslations {
             'Вы успешно подключили Homeworks Pro!',
         'proOverview_notificationErrorCanceled':
             'Не удалось завершить покупку. Пожалуйста, повторите попытку позже. {cancelled}',
+        'taskDetail_title': 'Напоминание',
       };
 }

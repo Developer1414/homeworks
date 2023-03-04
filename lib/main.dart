@@ -43,8 +43,6 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) {
-    /*initializeDateFormatting(Get.deviceLocale.toString(), null)
-        .then((value) => runApp(const MyApp()));*/
     runApp(const MyApp());
   });
 }
@@ -61,7 +59,7 @@ class MyApp extends StatelessWidget {
       translations: AppTranslations(),
       locale: ui.window.locale,
       fallbackLocale: const Locale('en', 'US'),
-      home: const Home(),
+      home: Home(),
     );
   }
 }
@@ -121,6 +119,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     checkForUpdate();
   }
 

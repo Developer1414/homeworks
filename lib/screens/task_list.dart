@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/models/task_model.dart';
 import 'package:scool_home_working/screens/new_task.dart';
-import 'package:scool_home_working/screens/task_details.dart';
 import 'package:scool_home_working/services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
@@ -48,7 +47,7 @@ class _TaskListState extends State<TaskList> {
     loadTasks();
 
     setState(() {
-      appController.selectedTasks.clear();
+      //appController.selectedTasks.clear();
     });
   }
 
@@ -150,7 +149,11 @@ class _TaskListState extends State<TaskList> {
                                       appController.selectedTasks.clear();
                                     });
 
-                                    await Get.to(() => const NewTask());
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const NewTask()));
+
                                     setState(() {});
                                   },
                             child: Row(
@@ -275,7 +278,7 @@ class _TaskListState extends State<TaskList> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          /*setState(() {
+                          setState(() {
                             if (!appController.selectedTasks
                                 .contains(currentTasks[index])) {
                               appController.selectedTasks
@@ -284,11 +287,8 @@ class _TaskListState extends State<TaskList> {
                               appController.selectedTasks
                                   .remove(currentTasks[index]);
                             }
-                          });*/
-                          Get.to(() => TaskDetails(
-                              taskId: currentTasks[index]
-                                  .notificationId
-                                  .toString()));
+                          });
+                          //Get.to(() => TaskDetails(task: currentTasks[index]));
                         },
                         child: Container(
                             decoration: BoxDecoration(

@@ -5,24 +5,80 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/models/task_model.dart';
+import 'package:scool_home_working/screens/task_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TaskDetails extends StatelessWidget {
-  const TaskDetails({super.key, this.taskId = ''});
+  const TaskDetails({super.key, required this.task});
 
-  final String taskId;
+  final Task task;
 
   @override
   Widget build(BuildContext context) {
     final AppController appController = Get.find();
 
-    Task task = appController.tasks
-        .where((p0) => p0.notificationId == taskId)
-        .toList()
-        .first;
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        bottomNavigationBar: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: SizedBox(
+                  height: 65.0,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Colors.redAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                    onPressed: () async {
+                      for (var element in appController.selectedTasks) {
+                        appController.tasks.remove(element);
+                      }
+
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+
+                      String encodedData = Task.encode(appController.tasks);
+                      await prefs.setString('task', encodedData);
+
+                      /*Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const TaskList()),
+                          ModalRoute.withName('/'));*/
+                      Get.back();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const FaIcon(FontAwesomeIcons.trash,
+                            color: Colors.white, size: 25),
+                        const SizedBox(width: 10.0),
+                        Flexible(
+                          child: AutoSizeText(
+                            'taskList_ButtonDeleteTask'.tr,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
         appBar: AppBar(
           elevation: 0,
           toolbarHeight: 70,
@@ -33,13 +89,17 @@ class TaskDetails extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 splashRadius: 25.0,
                 onPressed: () {
+                  /*Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => const TaskList()),
+                      ModalRoute.withName('/'));*/
+
                   Get.back();
                 },
                 icon: const FaIcon(FontAwesomeIcons.arrowLeft,
                     color: Colors.black87, size: 30)),
           ),
           title: AutoSizeText(
-            taskId,
+            'taskDetail_title'.tr,
             minFontSize: 10,
             maxLines: 1,
             style: GoogleFonts.roboto(
@@ -49,19 +109,34 @@ class TaskDetails extends StatelessWidget {
             ),
           ),
         ),
-        body: Column(
-          children: [
-            AutoSizeText(
-              task.titleTask,
-              minFontSize: 10,
-              maxLines: 1,
-              style: GoogleFonts.roboto(
-                color: Colors.black87,
-                fontSize: 28,
-                fontWeight: FontWeight.w900,
-              ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AutoSizeText(
+                  task.titleTask,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.roboto(
+                    color: Colors.black87,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                AutoSizeText(
+                  task.task,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.roboto(
+                    color: Colors.black87,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

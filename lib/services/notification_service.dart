@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:scool_home_working/controllers/app_controller.dart';
+import 'package:scool_home_working/main.dart';
 import 'package:scool_home_working/screens/task_details.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
@@ -24,7 +26,11 @@ class LocalNoticeService {
   }
 
   void handlePress(NotificationResponse value) {
-    Get.to(() => TaskDetails(taskId: value.payload!));
+    final AppController appController = Get.find();
+
+    appController.selectedTasks.add(appController.tasks
+        .where((p0) => p0.notificationId == int.parse(value.payload!))
+        .toList()[0]);
   }
 
   Future<void> addNotification(
