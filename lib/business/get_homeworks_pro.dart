@@ -1,11 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:get/get.dart';
+import 'package:scool_home_working/business/user_account.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/models/dialog.dart';
 import 'package:scool_home_working/screens/subscription_overview.dart';
+import 'package:scool_home_working/services/notification_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yookassa_payments_flutter/yookassa_payments_flutter.dart';
 
@@ -40,40 +46,39 @@ class Payment {
     if (result is SuccessTokenizationResult) {
       SubcriptionOverview.isLoading.value = true;
 
-      final http.Response response =
-          await http.post(Uri.parse('https://api.yookassa.ru/v3/payments'),
-              headers: <String, String>{
-                'Authorization':
-                    'Basic ${base64Encode(utf8.encode('982132:live_qKe6dJ9dSnpPJTweNyvQLb5IjAi9PcPyDyKsVMslDHw'))}',
-                'Idempotence-Key':
-                    DateTime.now().microsecondsSinceEpoch.toString(),
-                'Content-Type': 'application/json; charset=UTF-8',
+      final http.Response response = await http.post(
+          Uri.parse('https://api.yookassa.ru/v3/payments'),
+          headers: <String, String>{
+            'Authorization':
+                'Basic ${base64Encode(utf8.encode('982132:live_qKe6dJ9dSnpPJTweNyvQLb5IjAi9PcPyDyKsVMslDHw'))}',
+            'Idempotence-Key': DateTime.now().microsecondsSinceEpoch.toString(),
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(
+            <String, dynamic>{
+              "payment_token": result.token,
+              "amount": {
+                "value": amount.value,
+                "currency": amount.currency.value
               },
-              body: jsonEncode(
-                <String, dynamic>{
-                  "payment_token": result.token,
-                  "amount": {
-                    "value": amount.value,
-                    "currency": amount.currency.value
+              "capture": true,
+              "description": 'hello',
+              "receipt": {
+                "customer": {"email": FirebaseAuth.instance.currentUser!.email},
+                "items": [
+                  {
+                    "description": "Homeworks Pro",
+                    "quantity": "1",
+                    "amount": {
+                      "value": amount.value,
+                      "currency": amount.currency.value
+                    },
+                    "vat_code": "1"
                   },
-                  "capture": true,
-                  "description": 'hello',
-                  "receipt": {
-                    "customer": {"email": "develope14000@gmail.com"},
-                    "items": [
-                      {
-                        "description": "Homeworks Pro",
-                        "quantity": "1",
-                        "amount": {
-                          "value": amount.value,
-                          "currency": amount.currency.value
-                        },
-                        "vat_code": "1"
-                      },
-                    ]
-                  },
-                },
-              ));
+                ]
+              },
+            },
+          ));
 
       Map<String, dynamic> json = jsonDecode(response.body);
 
@@ -122,12 +127,43 @@ class Payment {
         if (json['status'] == 'succeeded') {
           appController.isHomeworksPro.value = true;
 
+          DateTime subscriptionDate = DateTime(
+                  DateTime.now().year, DateTime.now().month, DateTime.now().day)
+              .add(const Duration(days: 30));
+
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .update({'subscription': subscriptionDate});
+
+          await LocalNoticeService().addNotification(
+            id: Random().nextInt(100000000) +
+                DateTime.now().year +
+                DateTime.now().month +
+                DateTime.now().day +
+                DateTime.now().hour +
+                DateTime.now().minute +
+                DateTime.now().second +
+                DateTime.now().millisecond,
+            title: 'Homeworks',
+            body: 'systemNotification_RemindAboutSubscriptionEnd'.tr,
+            endTime: subscriptionDate
+                .subtract(const Duration(hours: 24))
+                .millisecondsSinceEpoch,
+            channel: 'work-end',
+          );
+
+          await UserAccount().checkSubscription();
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('subscription', subscriptionDate.toString());
+
+          SubcriptionOverview.isLoading.value = false;
+
           dialog(
               title: 'notification_TitleCongratulations'.tr,
               content: 'proOverview_homeworksProConnected'.tr);
 
-          SubcriptionOverview.isLoading.value = false;
-          AppMetrica.reportEvent('Buyed HomeworksPro');
           timer.cancel();
         } else if (json['status'] == 'canceled') {
           dialog(

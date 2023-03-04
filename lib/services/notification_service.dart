@@ -27,10 +27,7 @@ class LocalNoticeService {
 
   void handlePress(NotificationResponse value) {
     final AppController appController = Get.find();
-
-    appController.selectedTasks.add(appController.tasks
-        .where((p0) => p0.notificationId == int.parse(value.payload!))
-        .toList()[0]);
+    appController.taskIdFromNotification.value = int.parse(value.payload!);
   }
 
   Future<void> addNotification(

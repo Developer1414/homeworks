@@ -8,10 +8,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:scool_home_working/business/user_account.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/firebase_options.dart';
 import 'package:scool_home_working/models/dialog.dart';
 import 'package:scool_home_working/screens/new_task.dart';
+import 'package:scool_home_working/screens/task_details.dart';
 import 'package:scool_home_working/screens/task_list.dart';
 import 'package:scool_home_working/services/app_translations.dart';
 import 'package:scool_home_working/services/notification_service.dart';
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
       translations: AppTranslations(),
       locale: ui.window.locale,
       fallbackLocale: const Locale('en', 'US'),
-      home: Home(),
+      home: const Home(),
     );
   }
 }
@@ -73,6 +75,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   AppUpdateInfo? _updateInfo;
+
+  final AppController appController = Get.find();
 
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
@@ -114,6 +118,17 @@ class _HomeState extends State<Home> {
         });
       }
     }
+
+    if (prefs.containsKey('subscription')) {
+      if (DateTime.parse(prefs.get('subscription').toString())
+              .difference(DateTime.now())
+              .inDays <=
+          0) {
+        appController.isHomeworksPro.value = false;
+      } else {
+        appController.isHomeworksPro.value = true;
+      }
+    }
   }
 
   @override
@@ -121,13 +136,22 @@ class _HomeState extends State<Home> {
     super.initState();
 
     checkForUpdate();
+
+    UserAccount().checkSubscription();
+
+    if (appController.taskIdFromNotification.value != 0) {
+      Get.to(() => TaskDetails(
+          task: appController.tasks
+              .where((p0) =>
+                  p0.notificationId ==
+                  appController.taskIdFromNotification.value)
+              .toList()[0]));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     List screens = [const TaskList(), const NewTask()];
-
-    final AppController appController = Get.find();
 
     return MaterialApp(
       localizationsDelegates: const [
@@ -140,42 +164,50 @@ class _HomeState extends State<Home> {
         Locale('en', 'US'),
       ],
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        bottomNavigationBar: Obx(
-          () => BottomNavigationBar(
-            unselectedItemColor: Colors.black87.withOpacity(0.4),
-            selectedItemColor: Colors.black.withOpacity(0.7),
-            elevation: 15,
-            iconSize: 28,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: appController.currentScreen.value,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            selectedLabelStyle: GoogleFonts.roboto(
-              color: Colors.black87.withOpacity(0.5),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-            items: const [
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.listCheck),
-                activeIcon: FaIcon(FontAwesomeIcons.listCheck),
-                label: '',
-                tooltip: '',
+      home: Obx(
+        () => appController.taskIdFromNotification.value != 0
+            ? TaskDetails(
+                task: appController.tasks
+                    .where((p0) =>
+                        p0.notificationId ==
+                        appController.taskIdFromNotification.value)
+                    .toList()[0])
+            : Scaffold(
+                bottomNavigationBar: BottomNavigationBar(
+                  unselectedItemColor: Colors.black87.withOpacity(0.4),
+                  selectedItemColor: Colors.black.withOpacity(0.7),
+                  elevation: 15,
+                  iconSize: 28,
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: appController.currentScreen.value,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  selectedLabelStyle: GoogleFonts.roboto(
+                    color: Colors.black87.withOpacity(0.5),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: FaIcon(FontAwesomeIcons.listCheck),
+                      activeIcon: FaIcon(FontAwesomeIcons.listCheck),
+                      label: '',
+                      tooltip: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: FaIcon(FontAwesomeIcons.plus),
+                      activeIcon: FaIcon(FontAwesomeIcons.plus),
+                      label: '',
+                      tooltip: '',
+                    ),
+                  ],
+                  onTap: (index) {
+                    appController.currentScreen.value = index;
+                  },
+                ),
+                body: Obx(
+                    () => screens.elementAt(appController.currentScreen.value)),
               ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.plus),
-                activeIcon: FaIcon(FontAwesomeIcons.plus),
-                label: '',
-                tooltip: '',
-              ),
-            ],
-            onTap: (index) {
-              appController.currentScreen.value = index;
-            },
-          ),
-        ),
-        body: Obx(() => screens.elementAt(appController.currentScreen.value)),
       ),
     );
   }

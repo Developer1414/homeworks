@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +9,9 @@ import 'dart:ui' as ui;
 import 'package:intl/intl.dart';
 import 'package:scool_home_working/business/get_homeworks_pro.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
+import 'package:scool_home_working/models/dialog.dart';
+import 'package:scool_home_working/screens/login.dart';
+import 'package:scool_home_working/screens/user_details.dart';
 import 'package:scool_home_working/screens/viewer_user_agreement.dart';
 
 class SubcriptionOverview extends StatelessWidget {
@@ -21,7 +25,6 @@ class SubcriptionOverview extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        //appController.isHomeworksPro.value = true;
         return true;
       },
       child: MaterialApp(
@@ -107,7 +110,20 @@ class SubcriptionOverview extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  Payment().getHomeworksPro();
+                                  if (FirebaseAuth.instance.currentUser ==
+                                      null) {
+                                    Get.to(() => const Login());
+                                  } else {
+                                    if (appController.isHomeworksPro.value) {
+                                      dialog(
+                                          title: 'notification_TitleError'.tr,
+                                          content:
+                                              'proOverview_alreadyProApp'.tr,
+                                          isError: true);
+                                    } else {
+                                      Payment().getHomeworksPro();
+                                    }
+                                  }
                                 },
                                 child: AutoSizeText(
                                   'proOverview_buttonConnect'.tr,
@@ -183,6 +199,18 @@ class SubcriptionOverview extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                       ),
                     ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 25.0,
+                            onPressed: () async =>
+                                await modalBottomSheetUserDetails(),
+                            icon: const FaIcon(FontAwesomeIcons.solidUser,
+                                color: Colors.black87, size: 25)),
+                      )
+                    ],
                   ),
                   body: Padding(
                     padding: const EdgeInsets.only(left: 15.0, right: 15.0),

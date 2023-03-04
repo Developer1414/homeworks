@@ -16,6 +16,8 @@ class RuTranslations {
         'colorPicker_Title': 'Цвет предмета:',
         'colorPicker_ButtonApply': 'Применить',
         'systemNotification_Remind': 'Напоминание о задании по предмету',
+        'systemNotification_RemindAboutSubscriptionEnd':
+            'Ваша подписка закончится через 24 часа.',
         'newTask_notificationTaskAdded': 'Задание добавлено!',
         'newTask_notificationTaskChanged': 'Задание изменено!',
         'newTask_notificationPastTime':
@@ -96,6 +98,7 @@ class RuTranslations {
         'proOverview_month': 'месяц',
         'proOverview_buttonConnect': 'Подключить',
         'proOverview_checkPayment': 'Проверка оплаты...',
+        'proOverview_alreadyProApp': 'Вы уже подключили Homeworks Pro!',
         'proOverview_checkPaymentSberbank':
             'Вы должны получить push-уведомление от Сбербанка для подтверждения платежа. Если этого не произошло, зайдите в приложение или на сайт Сбербанка и проверьте подтверждение в уведомлениях.',
         'proOverview_userAgreementWarn': 'Подключаясь, Вы соглашаетесь с',
@@ -106,5 +109,29 @@ class RuTranslations {
         'proOverview_notificationErrorCanceled':
             'Не удалось завершить покупку. Пожалуйста, повторите попытку позже. {cancelled}',
         'taskDetail_title': 'Напоминание',
+        'profile_title': 'Ваш профиль',
+        'profile_accountTitle': 'Аккаунт',
+        'profile_subscriptionTitle': 'Подписка',
+        'profile_subscriptionActiveUntil': 'активна до',
+        'profile_subscriptionNotActive': 'неактивна',
+        'profile_logout': 'Выйти из аккаунта',
+        'profile_notLogged': 'Вы не вошли в аккаунт!',
+        'profile_login': 'Войти',
+        'login_userNotFound':
+            'Пользователь с таким адресом электронной почты не найден!',
+        'login_wrongPassword': 'Неверный пароль!',
+        'login_weakPassword': 'Пароль слишком короткий',
+        'login_emailAlreadyInUse':
+            'Этот адрес электронной почты уже существует!',
+        'login_loadingPleaseWait': 'Пожалуйста, подождите...',
+        'login_buttonRegister': 'Зарегистрироваться',
+        'login_buttonLogin': 'Войти',
+        'login_alreadyHaveAnAccount': 'Уже есть аккаунт?',
+        'login_noAccount': 'Нет аккаунта?',
+        'login_titleAuthorization': 'Авторизация',
+        'login_textInputEmailAddress': 'Почта...',
+        'login_textInputPassword': 'Пароль...',
+        'login_textWarning':
+            'Квитанции об оплате будут отправлены на этот адрес электронной почты.',
       };
 }

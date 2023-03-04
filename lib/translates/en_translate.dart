@@ -17,6 +17,8 @@ class EnTranslations {
         'colorPicker_ButtonApply': 'Apply',
         'systemNotification_Remind':
             'Reminder of the task in the subject of the',
+        'systemNotification_RemindAboutSubscriptionEnd':
+            'Your subscription will end in 24 hours.',
         'newTask_notificationTaskAdded': 'Task added!',
         'newTask_notificationTaskChanged': 'Task edited!',
         'newTask_notificationPastTime':
@@ -86,6 +88,9 @@ class EnTranslations {
         'proOverview_infinityTasksTitle': 'An unlimited number of tasks',
         'proOverview_infinityTasksSubtitle': 'Add as many tasks as you want!',
         'proOverview_infinityNotificationsTitle': 'Unlimited reminders',
+        'proOverview_checkPayment': 'Checking payment...',
+        'proOverview_alreadyProApp':
+            'You have already connected Homeworks Pro!',
         'proOverview_checkPaymentSberbank':
             'You should receive a push notification from Sberbank to confirm payment. If not, please go to the Sberbank app or website and check the confirmation in the notifications.',
         'proOverview_infinityNotificationsSubtitle':
@@ -103,5 +108,27 @@ class EnTranslations {
         'proOverview_notificationErrorCanceled':
             'The purchase could not be completed. Please try again later. {cancelled}',
         'taskDetail_title': 'Reminder',
+        'profile_title': 'Your profile',
+        'profile_accountTitle': 'Account',
+        'profile_subscriptionTitle': 'Subscription',
+        'profile_subscriptionActiveUntil': 'active until',
+        'profile_subscriptionNotActive': 'inactive',
+        'profile_logout': 'Sign out',
+        'profile_notLogged': 'You are not authorized!',
+        'profile_login': 'Login',
+        'login_userNotFound': 'No user found with this email address!',
+        'login_wrongPassword': 'Wrong password!',
+        'login_weakPassword': 'Weak password!',
+        'login_emailAlreadyInUse': 'Email already in use!',
+        'login_loadingPleaseWait': 'Please, wait...',
+        'login_buttonRegister': 'Register',
+        'login_buttonLogin': 'Login',
+        'login_alreadyHaveAnAccount': 'Already have an account?',
+        'login_noAccount': 'Don\'t have an account?',
+        'login_titleAuthorization': 'Authorization',
+        'login_textInputEmailAddress': 'Email...',
+        'login_textInputPassword': 'Password...',
+        'login_textWarning':
+            'Payment receipts will be sent to this email address.',
       };
 }
