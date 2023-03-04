@@ -21,7 +21,7 @@ class Payment {
   Future getHomeworksPro() async {
     var clientApplicationKey =
         "live_OTgyMTMyd3WgKx6U_t_xHzTFWmt93Qp1Anns6ZErqWM";
-    var amount = Amount(value: 1.00, currency: Currency.rub);
+    var amount = Amount(value: 70.00, currency: Currency.rub);
     var shopId = "982132";
     var moneyAuthClientId = "gganqqp7bvspn3g47ehqe2vtnut8hv59";
 
@@ -125,6 +125,8 @@ class Payment {
         Map<String, dynamic> json = jsonDecode(response.body);
 
         if (json['status'] == 'succeeded') {
+          timer.cancel();
+
           appController.isHomeworksPro.value = true;
 
           DateTime subscriptionDate = DateTime(
@@ -163,16 +165,15 @@ class Payment {
           dialog(
               title: 'notification_TitleCongratulations'.tr,
               content: 'proOverview_homeworksProConnected'.tr);
-
-          timer.cancel();
         } else if (json['status'] == 'canceled') {
+          timer.cancel();
+
           dialog(
               title: 'notification_TitleError'.tr,
               content: 'proOverview_notificationErrorCanceled'.tr,
               isError: true);
 
           SubcriptionOverview.isLoading.value = false;
-          timer.cancel();
         }
       }
     });

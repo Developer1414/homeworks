@@ -24,7 +24,7 @@ class TaskDetails extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          bottomNavigationBar: Row(
+          /*bottomNavigationBar: Row(
             children: [
               Expanded(
                 child: Padding(
@@ -76,7 +76,7 @@ class TaskDetails extends StatelessWidget {
                 ),
               ),
             ],
-          ),
+          ),*/
           appBar: AppBar(
             elevation: 0,
             toolbarHeight: 70,

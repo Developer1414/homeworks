@@ -537,25 +537,21 @@ class _NewTaskState extends State<NewTask> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 15.0, right: 15.0),
-                              child: SizedBox(
-                                width: 350.0,
-                                child: AutoSizeText(
-                                  '${'newTask_Remind'.tr} ${DateFormat.MMMMd(Get.deviceLocale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
-                                  minFontSize: 10,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.roboto(
-                                      color: Colors.black87.withOpacity(0.7),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700),
-                                ),
+                              padding: const EdgeInsets.only(left: 15.0),
+                              child: AutoSizeText(
+                                '${DateFormat.MMMMd(Get.deviceLocale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
+                                minFontSize: 10,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.roboto(
+                                    color: Colors.black87.withOpacity(0.7),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
-                                  right: 15.0, top: 5.0, bottom: 5.0),
+                                  right: 12.0, top: 5.0, bottom: 5.0),
                               child: SizedBox(
                                 height: 50,
                                 width: 35,

@@ -214,14 +214,18 @@ class Login extends StatelessWidget {
                                             Colors.black87.withOpacity(0.6)))),
                           ),
                         ),
-                        AutoSizeText(
-                          'login_textWarning'.tr,
-                          minFontSize: 10,
-                          maxLines: 1,
-                          style: GoogleFonts.roboto(
-                            color: Colors.black87.withOpacity(0.5),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 15.0, right: 15.0),
+                          child: AutoSizeText(
+                            'login_textWarning'.tr,
+                            minFontSize: 10,
+                            maxLines: 1,
+                            style: GoogleFonts.roboto(
+                              color: Colors.black87.withOpacity(0.5),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                         Padding(
