@@ -82,6 +82,11 @@ class Login extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () async {
+                                  if (emailController.text.isEmpty ||
+                                      passwordController.text.isEmpty) {
+                                    return;
+                                  }
+
                                   if (isRegister.value) {
                                     UserAccount().register(
                                         emailAddress:

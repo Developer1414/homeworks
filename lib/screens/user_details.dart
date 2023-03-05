@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/screens/login.dart';
+import 'dart:ui' as ui;
 
 Future modalBottomSheetUserDetails() async {
   final AppController appController = Get.find();
@@ -65,7 +66,7 @@ Future modalBottomSheetUserDetails() async {
                         ),
                         const SizedBox(height: 5.0),
                         AutoSizeText(
-                          '${'profile_subscriptionTitle'.tr}: ${appController.isHomeworksPro.value ? '${'profile_subscriptionActiveUntil'.tr} ${DateFormat.MMMMd('ru_RU').format(appController.subscriptionExpirationDate)}' : 'profile_subscriptionNotActive'.tr}',
+                          '${'profile_subscriptionTitle'.tr}: ${appController.isHomeworksPro.value ? '${'profile_subscriptionActiveUntil'.tr} ${DateFormat.MMMMd(ui.window.locale.toString()).format(appController.subscriptionExpirationDate)}' : 'profile_subscriptionNotActive'.tr}',
                           minFontSize: 10,
                           maxLines: 1,
                           style: GoogleFonts.roboto(

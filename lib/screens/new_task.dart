@@ -8,13 +8,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:scool_home_working/business/add_task.dart';
-import 'package:scool_home_working/business/user_account.dart';
+import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/models/dialog.dart';
 import 'package:scool_home_working/models/task_model.dart';
 import 'package:scool_home_working/screens/subscription_overview.dart';
 import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 import 'dart:ui' as ui;
-import '../controllers/app_controller.dart';
 
 class NewTask extends StatefulWidget {
   const NewTask({super.key});
@@ -26,23 +25,21 @@ class NewTask extends StatefulWidget {
 }
 
 class _NewTaskState extends State<NewTask> {
-  late DateTime? selectedDate = DateTime(
+  static late DateTime? selectedDate = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
   final AppController appController = Get.find();
 
-  bool isNotificationEnable = false;
-  bool isWarningEnable = false;
-  bool isImportantTaskEnable = false;
+  static bool isNotificationEnable = false;
+  static bool isImportantTaskEnable = false;
 
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController taskController = TextEditingController();
+  static TextEditingController titleController = TextEditingController();
+  static TextEditingController taskController = TextEditingController();
 
-  Color pickerColor = Colors.grey.shade800;
-  Color currentColor = Colors.black87;
+  static Color pickerColor = Colors.grey.shade800;
 
-  DateTime? selectedDateNotification = DateTime(
+  static DateTime? selectedDateNotification = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
-  TimeOfDay? selectedTimeNotification = TimeOfDay.now();
+  static TimeOfDay? selectedTimeNotification = TimeOfDay.now();
 
   List<String> subjects = [
     'Algebra'.tr,
@@ -147,7 +144,8 @@ class _NewTaskState extends State<NewTask> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        NewTask.taskForChange = null;
+        return true;
       },
       child: GestureDetector(
         onTap: () {
@@ -189,36 +187,40 @@ class _NewTaskState extends State<NewTask> {
                 ),
               ),
               actions: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: SizedBox(
-                    height: 30.0,
-                    width: 120.0,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 5,
-                        backgroundColor: const Color.fromARGB(255, 255, 164, 0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                appController.isHomeworksPro.value &&
+                        NewTask.taskForChange != null
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: SizedBox(
+                          height: 30.0,
+                          width: 120.0,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 5,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 255, 164, 0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                            onPressed: () {
+                              Get.to(() => const SubcriptionOverview());
+                            },
+                            child: AutoSizeText(
+                              'Homeworks Pro',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        Get.to(() => const SubcriptionOverview());
-                      },
-                      child: AutoSizeText(
-                        'Homeworks Pro',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.roboto(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
             body: ListView(
@@ -539,7 +541,7 @@ class _NewTaskState extends State<NewTask> {
                             Padding(
                               padding: const EdgeInsets.only(left: 15.0),
                               child: AutoSizeText(
-                                '${DateFormat.MMMMd(Get.deviceLocale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
+                                '${DateFormat.MMMMd(ui.window.locale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
                                 minFontSize: 10,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -654,26 +656,6 @@ class _NewTaskState extends State<NewTask> {
                           return;
                         }
 
-                        DateTime dateTimeCreatedAt = DateTime(
-                            selectedDateNotification!.year,
-                            selectedDateNotification!.month,
-                            selectedDateNotification!.day,
-                            selectedTimeNotification!.hour,
-                            selectedTimeNotification!.minute);
-
-                        DateTime dateTimeNow = DateTime.now();
-
-                        final differenceInDays =
-                            dateTimeNow.difference(dateTimeCreatedAt).inSeconds;
-
-                        if (differenceInDays >= 0) {
-                          dialog(
-                              title: 'notification_TitleError'.tr,
-                              content: 'newTask_notificationPastTime'.tr,
-                              isError: true);
-                          return;
-                        }
-
                         int noticeID = isNotificationEnable
                             ? Random().nextInt(100000000) +
                                 DateTime.now().year +
@@ -686,6 +668,27 @@ class _NewTaskState extends State<NewTask> {
                             : 0;
 
                         dismissKeyboardFocus();
+
+                        if (isNotificationEnable) {
+                          DateTime dateTimeCreatedAt = DateTime(
+                              selectedDateNotification!.year,
+                              selectedDateNotification!.month,
+                              selectedDateNotification!.day,
+                              selectedTimeNotification!.hour,
+                              selectedTimeNotification!.minute);
+
+                          final differenceInDays = DateTime.now()
+                              .difference(dateTimeCreatedAt)
+                              .inSeconds;
+
+                          if (differenceInDays >= 0) {
+                            dialog(
+                                title: 'notification_TitleError'.tr,
+                                content: 'newTask_notificationPastTime'.tr,
+                                isError: true);
+                            return;
+                          }
+                        }
 
                         addNewTask(
                             isImportantTaskEnable: isImportantTaskEnable,
@@ -841,7 +844,7 @@ class _NewTaskState extends State<NewTask> {
               ElevatedButton(
                 child: Text('colorPicker_ButtonApply'.tr),
                 onPressed: () {
-                  setState(() => currentColor = pickerColor);
+                  setState(() {});
                   Navigator.of(context).pop();
                 },
               ),

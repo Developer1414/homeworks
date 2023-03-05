@@ -1,4 +1,5 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,8 @@ import 'package:stack_appodeal_flutter/stack_appodeal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Get.put(AppController());
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -54,8 +57,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppController appController = Get.put(AppController());
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       translations: AppTranslations(),
@@ -139,14 +140,14 @@ class _HomeState extends State<Home> {
 
     UserAccount().checkSubscription();
 
-    if (appController.taskIdFromNotification.value != 0) {
+    /*if (appController.taskIdFromNotification.value != 0) {
       Get.to(() => TaskDetails(
           task: appController.tasks
               .where((p0) =>
                   p0.notificationId ==
                   appController.taskIdFromNotification.value)
               .toList()[0]));
-    }
+    }*/
   }
 
   @override
@@ -164,50 +165,40 @@ class _HomeState extends State<Home> {
         Locale('en', 'US'),
       ],
       debugShowCheckedModeBanner: false,
-      home: Obx(
-        () => appController.taskIdFromNotification.value != 0
-            ? TaskDetails(
-                task: appController.tasks
-                    .where((p0) =>
-                        p0.notificationId ==
-                        appController.taskIdFromNotification.value)
-                    .toList()[0])
-            : Scaffold(
-                bottomNavigationBar: BottomNavigationBar(
-                  unselectedItemColor: Colors.black87.withOpacity(0.4),
-                  selectedItemColor: Colors.black.withOpacity(0.7),
-                  elevation: 15,
-                  iconSize: 28,
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: appController.currentScreen.value,
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
-                  selectedLabelStyle: GoogleFonts.roboto(
-                    color: Colors.black87.withOpacity(0.5),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  items: const [
-                    BottomNavigationBarItem(
-                      icon: FaIcon(FontAwesomeIcons.listCheck),
-                      activeIcon: FaIcon(FontAwesomeIcons.listCheck),
-                      label: '',
-                      tooltip: '',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: FaIcon(FontAwesomeIcons.plus),
-                      activeIcon: FaIcon(FontAwesomeIcons.plus),
-                      label: '',
-                      tooltip: '',
-                    ),
-                  ],
-                  onTap: (index) {
-                    appController.currentScreen.value = index;
-                  },
-                ),
-                body: Obx(
-                    () => screens.elementAt(appController.currentScreen.value)),
-              ),
+      home: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          unselectedItemColor: Colors.black87.withOpacity(0.4),
+          selectedItemColor: Colors.black.withOpacity(0.7),
+          elevation: 15,
+          iconSize: 28,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: appController.currentScreen.value,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedLabelStyle: GoogleFonts.roboto(
+            color: Colors.black87.withOpacity(0.5),
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          items: const [
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.listCheck),
+              activeIcon: FaIcon(FontAwesomeIcons.listCheck),
+              label: '',
+              tooltip: '',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.plus),
+              activeIcon: FaIcon(FontAwesomeIcons.plus),
+              label: '',
+              tooltip: '',
+            ),
+          ],
+          onTap: (index) {
+            appController.currentScreen.value = index;
+          },
+        ),
+        body: Obx(() => screens.elementAt(appController.currentScreen.value)),
       ),
     );
   }
