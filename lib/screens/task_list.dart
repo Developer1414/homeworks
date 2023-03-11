@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:scool_home_working/business/add_task.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/models/task_model.dart';
 import 'package:scool_home_working/screens/new_task.dart';
@@ -68,10 +69,10 @@ class _TaskListState extends State<TaskList> {
           () => appController.selectedTasks.isNotEmpty
               ? Row(
                   children: [
+                    const SizedBox(width: 15.0),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, top: 15.0, bottom: 15.0),
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                         child: SizedBox(
                           height: 65.0,
                           child: ElevatedButton(
@@ -100,27 +101,8 @@ class _TaskListState extends State<TaskList> {
                                   Task.encode(appController.tasks);
                               await prefs.setString('task', encodedData);
                             },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const FaIcon(FontAwesomeIcons.trash,
-                                    color: Colors.white, size: 25),
-                                const SizedBox(width: 10.0),
-                                Flexible(
-                                  child: AutoSizeText(
-                                    'taskList_ButtonDeleteTask'.tr,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            child: const FaIcon(FontAwesomeIcons.trash,
+                                color: Colors.white, size: 25),
                           ),
                         ),
                       ),
@@ -128,8 +110,7 @@ class _TaskListState extends State<TaskList> {
                     const SizedBox(width: 15.0),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 15.0, top: 15.0, bottom: 15.0),
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                         child: SizedBox(
                           height: 65.0,
                           child: ElevatedButton(
@@ -143,45 +124,75 @@ class _TaskListState extends State<TaskList> {
                             onPressed: appController.selectedTasks.length > 1
                                 ? null
                                 : () async {
-                                    setState(() {
-                                      NewTask.taskForChange =
-                                          appController.selectedTasks[0];
+                                    NewTask.taskForChange =
+                                        appController.selectedTasks[0];
 
-                                      appController.selectedTasks.clear();
-                                    });
+                                    appController.selectedTasks.clear();
 
-                                    Navigator.of(context).push(
+                                    await Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 const NewTask()));
 
                                     setState(() {});
                                   },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const FaIcon(FontAwesomeIcons.solidPenToSquare,
-                                    color: Colors.white, size: 25),
-                                const SizedBox(width: 10.0),
-                                Flexible(
-                                  child: AutoSizeText(
-                                    'taskList_ButtonChangeTask'.tr,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            child: const FaIcon(
+                                FontAwesomeIcons.solidPenToSquare,
+                                color: Colors.white,
+                                size: 28),
                           ),
                         ),
                       ),
                     ),
+                    const SizedBox(width: 15.0),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                        child: SizedBox(
+                          height: 65.0,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 5,
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                            onPressed: appController.selectedTasks.length > 1
+                                ? null
+                                : () async {
+                                    Task currentTask =
+                                        appController.selectedTasks[0];
+
+                                    addNewTask(
+                                        isImportantTaskEnable:
+                                            currentTask.importantTask,
+                                        isNotificationEnable:
+                                            currentTask.notificationId > 0,
+                                        noticeID: currentTask.notificationId,
+                                        selectedDate: selectedDate!,
+                                        title: currentTask.titleTask,
+                                        task: currentTask.task,
+                                        selectedDateNotification:
+                                            currentTask.date,
+                                        selectedTimeNotification:
+                                            TimeOfDay.fromDateTime(
+                                                currentTask.date),
+                                        pickerColor: currentTask.taskTitleColor,
+                                        context: context,
+                                        isCreatedAgain: true);
+
+                                    appController.selectedTasks.clear();
+
+                                    setState(() {});
+                                  },
+                            child: const FaIcon(FontAwesomeIcons.repeat,
+                                color: Colors.white, size: 28),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 15.0),
                   ],
                 )
               : appController.isHomeworksPro.value
@@ -220,11 +231,6 @@ class _TaskListState extends State<TaskList> {
                       firstDate: DateTime(2022),
                       lastDate: DateTime(2100),
                       locale: Get.locale,
-                      helpText: 'newTask_datePicker_helpText'.tr,
-                      cancelText: 'newTask_datePicker_cancelText'.tr,
-                      confirmText: 'newTask_datePicker_confirmText'.tr,
-                      fieldLabelText: 'newTask_datePicker_fieldLabelText'.tr,
-                      fieldHintText: 'newTask_datePicker_fieldHintText'.tr,
                     );
 
                     selectedDate = date ?? selectedDate;
@@ -401,6 +407,14 @@ class _TaskListState extends State<TaskList> {
                                         const EdgeInsets.only(bottom: 10.0),
                                     child: Text(
                                       currentTasks[index].task,
+                                      overflow: appController.selectedTasks
+                                              .contains(currentTasks[index])
+                                          ? null
+                                          : TextOverflow.ellipsis,
+                                      maxLines: appController.selectedTasks
+                                              .contains(currentTasks[index])
+                                          ? null
+                                          : 3,
                                       style: GoogleFonts.roboto(
                                           color:
                                               Colors.black87.withOpacity(0.7),

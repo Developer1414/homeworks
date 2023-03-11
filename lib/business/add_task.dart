@@ -14,11 +14,13 @@ Future addNewTask(
     bool isImportantTaskEnable = false,
     bool isNotificationEnable = false,
     required DateTime selectedDate,
-    required TextEditingController titleController,
-    required TextEditingController taskController,
+    required String title,
+    required String task,
     required DateTime selectedDateNotification,
     required TimeOfDay selectedTimeNotification,
-    required Color pickerColor}) async {
+    required Color pickerColor,
+    required BuildContext context,
+    bool isCreatedAgain = false}) async {
   final AppController appController = Get.find();
 
   if (isNotificationEnable && !appController.isHomeworksPro.value) {
@@ -30,8 +32,8 @@ Future addNewTask(
         notificationId: noticeID,
         importantTask: isImportantTaskEnable,
         date: selectedDate,
-        titleTask: titleController.text,
-        task: taskController.text,
+        titleTask: title,
+        task: task,
         taskTitleColor: pickerColor));
   } else {
     if (!isNotificationEnable) {
@@ -45,8 +47,8 @@ Future addNewTask(
             notificationId: noticeID,
             importantTask: isImportantTaskEnable,
             date: selectedDate,
-            titleTask: titleController.text,
-            task: taskController.text,
+            titleTask: title,
+            task: task,
             taskTitleColor: pickerColor);
   }
 
@@ -61,7 +63,7 @@ Future addNewTask(
     LocalNoticeService().addNotification(
       id: noticeID,
       title: 'Homeworks',
-      body: "${'systemNotification_Remind'.tr} \"${titleController.text}\"",
+      body: "${'systemNotification_Remind'.tr} \"$title\"",
       endTime: dateForNotification.millisecondsSinceEpoch,
       channel: 'work-end',
     );
@@ -74,13 +76,23 @@ Future addNewTask(
   AppMetrica.reportEvent('ImportantTask: $isImportantTaskEnable');
   AppMetrica.reportEvent('NotifyTask: $isNotificationEnable');
 
-  if (NewTask.taskForChange == null) {
-    dialog(
-        title: 'notification_TitleNotification'.tr,
-        content: 'newTask_notificationTaskAdded'.tr);
+  if (!isCreatedAgain) {
+    if (NewTask.taskForChange == null) {
+      dialog(
+          title: 'notification_TitleNotification'.tr,
+          content: 'newTask_notificationTaskAdded'.tr);
+    } else {
+      NewTask.taskForChange = null;
+
+      Navigator.of(context).pop();
+
+      dialog(
+          title: 'notification_TitleNotification'.tr,
+          content: 'newTask_notificationTaskChanged'.tr);
+    }
   } else {
     dialog(
         title: 'notification_TitleNotification'.tr,
-        content: 'newTask_notificationTaskChanged'.tr);
+        content: 'newTask_notificationTaskCreatedAgain'.tr);
   }
 }

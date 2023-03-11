@@ -14,11 +14,18 @@ import 'package:scool_home_working/screens/login.dart';
 import 'package:scool_home_working/screens/user_details.dart';
 import 'package:scool_home_working/screens/viewer_user_agreement.dart';
 
-class SubcriptionOverview extends StatelessWidget {
+class SubcriptionOverview extends StatefulWidget {
   const SubcriptionOverview({super.key});
 
   static RxBool isLoading = false.obs;
   static RxBool isConfirmPayment = false.obs;
+  static PaymentPlan paymentPlan = PaymentPlan.year;
+
+  @override
+  State<SubcriptionOverview> createState() => _SubcriptionOverviewState();
+}
+
+class _SubcriptionOverviewState extends State<SubcriptionOverview> {
   @override
   Widget build(BuildContext context) {
     final AppController appController = Get.find();
@@ -30,7 +37,7 @@ class SubcriptionOverview extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Obx(
-          () => isLoading.value
+          () => SubcriptionOverview.isLoading.value
               ? Scaffold(
                   body: Center(
                     child: Column(
@@ -56,7 +63,7 @@ class SubcriptionOverview extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        !isConfirmPayment.value
+                        !SubcriptionOverview.isConfirmPayment.value
                             ? Container(height: 0)
                             : Padding(
                                 padding: const EdgeInsets.only(
@@ -77,22 +84,172 @@ class SubcriptionOverview extends StatelessWidget {
                 )
               : Scaffold(
                   bottomNavigationBar: SizedBox(
-                    height: 170,
+                    height: 250,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AutoSizeText(
-                            '${NumberFormat.simpleCurrency(locale: ui.window.locale.toString() == 'ru_RU' ? 'ru_RU' : 'en_US').format(ui.window.locale.toString() == 'ru_RU' ? 70 : 0.94)} / ${'proOverview_month'.tr}',
-                            minFontSize: 10,
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.roboto(
-                              color: Colors.black87,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w900,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  SubcriptionOverview.paymentPlan =
+                                      PaymentPlan.month;
+
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color:
+                                              SubcriptionOverview.paymentPlan ==
+                                                      PaymentPlan.month
+                                                  ? Colors.green.shade400
+                                                  : Colors.grey.shade400,
+                                          width: 2.0),
+                                      color: SubcriptionOverview.paymentPlan ==
+                                              PaymentPlan.month
+                                          ? Colors.green.shade100
+                                          : Colors.grey.shade200,
+                                      borderRadius:
+                                          BorderRadius.circular(15.0)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      NumberFormat.simpleCurrency(
+                                              locale:
+                                                  ui.window.locale.toString() ==
+                                                          'ru_RU'
+                                                      ? 'ru_RU'
+                                                      : 'en_US')
+                                          .format(ui.window.locale.toString() ==
+                                                  'ru_RU'
+                                              ? 70
+                                              : 0.94),
+                                      minFontSize: 10,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.roboto(
+                                        color: Colors.black87,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 5.0),
+                              AutoSizeText(
+                                '/ ${'proOverview_month'.tr}',
+                                minFontSize: 10,
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                  color: Colors.black87,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  SubcriptionOverview.paymentPlan =
+                                      PaymentPlan.year;
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color:
+                                              SubcriptionOverview.paymentPlan ==
+                                                      PaymentPlan.year
+                                                  ? Colors.green.shade400
+                                                  : Colors.grey.shade400,
+                                          width: 2.0),
+                                      color: SubcriptionOverview.paymentPlan ==
+                                              PaymentPlan.year
+                                          ? Colors.green.shade100
+                                          : Colors.grey.shade200,
+                                      borderRadius:
+                                          BorderRadius.circular(15.0)),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: AutoSizeText(
+                                          NumberFormat.simpleCurrency(
+                                                  locale: ui.window.locale
+                                                              .toString() ==
+                                                          'ru_RU'
+                                                      ? 'ru_RU'
+                                                      : 'en_US')
+                                              .format(
+                                                  ui.window.locale.toString() ==
+                                                          'ru_RU'
+                                                      ? 699
+                                                      : 9.17),
+                                          minFontSize: 10,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.roboto(
+                                            color: Colors.black87,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 8.0),
+                                        decoration: BoxDecoration(
+                                            color: Colors.redAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: Colors.redAccent,
+                                                blurRadius: 5.0,
+                                              )
+                                            ]),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: AutoSizeText(
+                                            'proOverview_profitablePrice'.tr,
+                                            minFontSize: 10,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.roboto(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 5.0),
+                              AutoSizeText(
+                                '/ ${'proOverview_year'.tr}',
+                                minFontSize: 10,
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                  color: Colors.black87,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              )
+                            ],
                           ),
                           Padding(
                             padding:
@@ -121,7 +278,9 @@ class SubcriptionOverview extends StatelessWidget {
                                               'proOverview_alreadyProApp'.tr,
                                           isError: true);
                                     } else {
-                                      Payment().getHomeworksPro();
+                                      Payment().getHomeworksPro(
+                                          paymentPlan:
+                                              SubcriptionOverview.paymentPlan);
                                     }
                                   }
                                 },

@@ -20,19 +20,13 @@ class RuTranslations {
             'Ваша подписка закончится через 24 часа.',
         'newTask_notificationTaskAdded': 'Задание добавлено!',
         'newTask_notificationTaskChanged': 'Задание изменено!',
+        'newTask_notificationTaskCreatedAgain':
+            'Задание успешно создано ещё раз!',
         'newTask_notificationPastTime':
             'Задание должно быть в будущем времени!',
         'newTask_taskEmpty': 'Вы не вписали задание!',
         'newTask_subjectEmpty': 'Вы не вписали название предмета!',
         'newTask_timeAt': 'в',
-        'newTask_datePicker_helpText': 'Выберите дату',
-        'newTask_datePicker_cancelText': 'Отмена',
-        'newTask_datePicker_confirmText': 'Выбрать',
-        'newTask_datePicker_fieldLabelText': 'Напишите дату',
-        'newTask_datePicker_fieldHintText': 'ММ/ДД/ГГГГ',
-        'newTask_timePicker_helpText': 'Выберите время',
-        'newTask_timePicker_minuteLabelText': 'Минуты',
-        'newTask_timePicker_hourLabelText': 'Часы',
         'newTask_remainingTasks': 'Осталось',
         'newTask_notConnectedHomeworksProWarning':
             'Поскольку у Вас не подключен Homeworks Pro, Вы можете добавить только 5 заданий и 3 напоминания на одну дату.',
@@ -96,6 +90,7 @@ class RuTranslations {
         'proOverview_newFeauteresSubtitle':
             'Вы будете одним из первых, кто протестирует новые функции!',
         'proOverview_month': 'месяц',
+        'proOverview_year': 'год',
         'proOverview_buttonConnect': 'Подключить',
         'proOverview_checkPayment': 'Проверка оплаты...',
         'proOverview_alreadyProApp': 'Вы уже подключили Homeworks Pro!',
@@ -108,6 +103,7 @@ class RuTranslations {
             'Вы успешно подключили Homeworks Pro!',
         'proOverview_notificationErrorCanceled':
             'Не удалось завершить покупку. Пожалуйста, повторите попытку позже. {cancelled}',
+        'proOverview_profitablePrice': 'Выгодно',
         'taskDetail_title': 'Напоминание',
         'profile_title': 'Ваш профиль',
         'profile_accountTitle': 'Аккаунт',
@@ -133,5 +129,7 @@ class RuTranslations {
         'login_textInputPassword': 'Пароль...',
         'login_textWarning':
             'Квитанции об оплате будут отправлены на этот адрес электронной почты.',
+        'payment_subtitle': 'Pro версия приложения',
+        'payment_description': 'Оплата заказа для',
       };
 }

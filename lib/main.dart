@@ -1,5 +1,4 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +13,6 @@ import 'package:scool_home_working/controllers/app_controller.dart';
 import 'package:scool_home_working/firebase_options.dart';
 import 'package:scool_home_working/models/dialog.dart';
 import 'package:scool_home_working/screens/new_task.dart';
-import 'package:scool_home_working/screens/task_details.dart';
 import 'package:scool_home_working/screens/task_list.dart';
 import 'package:scool_home_working/services/app_translations.dart';
 import 'package:scool_home_working/services/notification_service.dart';
@@ -112,13 +110,29 @@ class _HomeState extends State<Home> {
 
     final InAppReview inAppReview = InAppReview.instance;
 
-    if (prefs.containsKey('task') && !prefs.containsKey('requestReview')) {
-      if (await inAppReview.isAvailable()) {
-        inAppReview.requestReview().whenComplete(() {
-          prefs.setBool('requestReview', true);
-        });
+    //prefs.remove('requestReview');
+
+    /*if (await inAppReview.isAvailable()) {
+          inAppReview.requestReview().whenComplete(() {
+            prefs.setBool('requestReview', true);
+          });
+        }*/
+
+    if (prefs.containsKey('task')) {
+      if (!prefs.containsKey('requestReview') ||
+          DateTime.now()
+                  .difference(DateTime.parse(prefs.getString('requestReview')!))
+                  .inDays >=
+              30) {
+        prefs.setString('requestReview', DateTime.now().toString());
+
+        print(
+            'ABOBA: ${DateTime.now().difference(DateTime.parse(prefs.getString('requestReview')!)).inDays}');
       }
     }
+
+    print(
+        'ABOBA: ${DateTime.parse(prefs.getString('requestReview')!)}: ${DateTime.now().difference(DateTime.parse(prefs.getString('requestReview')!)).inMinutes}');
 
     if (prefs.containsKey('subscription')) {
       if (DateTime.parse(prefs.get('subscription').toString())
@@ -139,20 +153,11 @@ class _HomeState extends State<Home> {
     checkForUpdate();
 
     UserAccount().checkSubscription();
-
-    /*if (appController.taskIdFromNotification.value != 0) {
-      Get.to(() => TaskDetails(
-          task: appController.tasks
-              .where((p0) =>
-                  p0.notificationId ==
-                  appController.taskIdFromNotification.value)
-              .toList()[0]));
-    }*/
   }
 
   @override
   Widget build(BuildContext context) {
-    List screens = [const TaskList(), const NewTask()];
+    List screens = [const TaskList(), /*const SearchTask(),*/ const NewTask()];
 
     return MaterialApp(
       localizationsDelegates: const [
@@ -165,40 +170,45 @@ class _HomeState extends State<Home> {
         Locale('en', 'US'),
       ],
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          unselectedItemColor: Colors.black87.withOpacity(0.4),
-          selectedItemColor: Colors.black.withOpacity(0.7),
-          elevation: 15,
-          iconSize: 28,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: appController.currentScreen.value,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedLabelStyle: GoogleFonts.roboto(
-            color: Colors.black87.withOpacity(0.5),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
+      home: Obx(
+        () => Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            unselectedItemColor: Colors.black87.withOpacity(0.4),
+            selectedItemColor: Colors.black.withOpacity(0.7),
+            elevation: 15,
+            iconSize: 28,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: appController.currentScreen.value,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedLabelStyle: GoogleFonts.roboto(
+              color: Colors.black87.withOpacity(0.5),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            items: const [
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.listCheck),
+                label: '',
+                tooltip: '',
+              ),
+              /*BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                label: '',
+                tooltip: '',
+              ),*/
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.plus),
+                label: '',
+                tooltip: '',
+              ),
+            ],
+            onTap: (index) {
+              appController.currentScreen.value = index;
+            },
           ),
-          items: const [
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.listCheck),
-              activeIcon: FaIcon(FontAwesomeIcons.listCheck),
-              label: '',
-              tooltip: '',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.plus),
-              activeIcon: FaIcon(FontAwesomeIcons.plus),
-              label: '',
-              tooltip: '',
-            ),
-          ],
-          onTap: (index) {
-            appController.currentScreen.value = index;
-          },
+          body: screens.elementAt(appController.currentScreen.value),
         ),
-        body: Obx(() => screens.elementAt(appController.currentScreen.value)),
       ),
     );
   }

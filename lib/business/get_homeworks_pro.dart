@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:get/get.dart';
 import 'package:scool_home_working/business/user_account.dart';
 import 'package:scool_home_working/controllers/app_controller.dart';
@@ -15,20 +14,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yookassa_payments_flutter/yookassa_payments_flutter.dart';
 
+enum PaymentPlan { month, year }
+
 class Payment {
   final AppController appController = Get.find();
 
-  Future getHomeworksPro() async {
+  Future getHomeworksPro({required PaymentPlan paymentPlan}) async {
     var clientApplicationKey =
         "live_OTgyMTMyd3WgKx6U_t_xHzTFWmt93Qp1Anns6ZErqWM";
-    var amount = Amount(value: 70.00, currency: Currency.rub);
+    var amount = Amount(
+        value: paymentPlan == PaymentPlan.month ? 70.0 : 699.0,
+        currency: Currency.rub);
     var shopId = "982132";
     var moneyAuthClientId = "gganqqp7bvspn3g47ehqe2vtnut8hv59";
 
     var tokenizationModuleInputData = TokenizationModuleInputData(
         clientApplicationKey: clientApplicationKey,
-        title: "Homeworks Pro",
-        subtitle: "Pro версия приложения",
+        title: 'Homeworks Pro',
+        subtitle: 'payment_subtitle'.tr,
         amount: amount,
         savePaymentMethod: SavePaymentMethod.userSelects,
         //isLoggingEnabled: true,
@@ -62,7 +65,8 @@ class Payment {
                 "currency": amount.currency.value
               },
               "capture": true,
-              "description": 'hello',
+              "description":
+                  '${'payment_description'.tr} ${FirebaseAuth.instance.currentUser!.email}',
               "receipt": {
                 "customer": {"email": FirebaseAuth.instance.currentUser!.email},
                 "items": [
@@ -96,7 +100,7 @@ class Payment {
         }
       }
 
-      checkPayment(json['id']);
+      checkPayment(paymentId: json['id'], paymentPlan: paymentPlan);
     } else if (result is ErrorTokenizationResult) {
       dialog(
           title: 'notification_TitleError'.tr,
@@ -110,7 +114,9 @@ class Payment {
     }
   }
 
-  Future checkPayment(String paymentId) async {
+  Future checkPayment(
+      {String paymentId = '',
+      PaymentPlan paymentPlan = PaymentPlan.month}) async {
     http.Response response;
 
     Timer.periodic(const Duration(seconds: 1), (timer) async {
@@ -131,7 +137,7 @@ class Payment {
 
           DateTime subscriptionDate = DateTime(
                   DateTime.now().year, DateTime.now().month, DateTime.now().day)
-              .add(const Duration(days: 30));
+              .add(Duration(days: paymentPlan == PaymentPlan.month ? 30 : 365));
 
           await FirebaseFirestore.instance
               .collection('users')

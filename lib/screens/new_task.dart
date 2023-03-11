@@ -88,11 +88,6 @@ class _NewTaskState extends State<NewTask> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
       locale: Get.locale,
-      helpText: 'newTask_datePicker_helpText'.tr,
-      cancelText: 'newTask_datePicker_cancelText'.tr,
-      confirmText: 'newTask_datePicker_confirmText'.tr,
-      fieldLabelText: 'newTask_datePicker_fieldLabelText'.tr,
-      fieldHintText: 'newTask_datePicker_fieldHintText'.tr,
     );
 
     if (selectedDate != null) {
@@ -100,11 +95,6 @@ class _NewTaskState extends State<NewTask> {
       selectedTimeNotification = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.now(),
-        helpText: 'newTask_timePicker_helpText'.tr,
-        cancelText: 'newTask_datePicker_cancelText'.tr,
-        confirmText: 'newTask_datePicker_confirmText'.tr,
-        minuteLabelText: 'newTask_timePicker_minuteLabelText'.tr,
-        hourLabelText: 'newTask_timePicker_hourLabelText'.tr,
       );
     }
 
@@ -141,305 +131,352 @@ class _NewTaskState extends State<NewTask> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    if (NewTask.taskForChange != null) {
+      titleController.clear();
+      taskController.clear();
+    }
+
+    NewTask.taskForChange = null;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        NewTask.taskForChange = null;
-        return true;
+    return GestureDetector(
+      onTap: () {
+        dismissKeyboardFocus();
       },
-      child: GestureDetector(
-        onTap: () {
-          dismissKeyboardFocus();
-        },
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              elevation: 0,
-              toolbarHeight: 70,
-              backgroundColor: Colors.transparent,
-              leading: NewTask.taskForChange == null
-                  ? null
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            elevation: 0,
+            toolbarHeight: 70,
+            backgroundColor: Colors.transparent,
+            leading: NewTask.taskForChange == null
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: IconButton(
+                        padding: EdgeInsets.zero,
+                        splashRadius: 25.0,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          setState(() {});
+                        },
+                        icon: const FaIcon(FontAwesomeIcons.arrowLeft,
+                            color: Colors.black87, size: 30)),
+                  ),
+            title: AutoSizeText(
+              NewTask.taskForChange != null
+                  ? 'editTask_title'.tr
+                  : 'newTask_title'.tr,
+              minFontSize: 10,
+              maxLines: 1,
+              style: GoogleFonts.roboto(
+                color: Colors.black87,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            actions: [
+              appController.isHomeworksPro.value &&
+                      NewTask.taskForChange != null
+                  ? Container()
                   : Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: IconButton(
-                          padding: EdgeInsets.zero,
-                          splashRadius: 25.0,
+                      padding: const EdgeInsets.all(15.0),
+                      child: SizedBox(
+                        height: 30.0,
+                        width: 120.0,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 5,
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 164, 0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                          ),
                           onPressed: () {
-                            NewTask.taskForChange = null;
-                            Navigator.of(context).pop();
-                            setState(() {});
+                            Get.to(() => const SubcriptionOverview());
                           },
-                          icon: const FaIcon(FontAwesomeIcons.arrowLeft,
-                              color: Colors.black87, size: 30)),
+                          child: AutoSizeText(
+                            'Homeworks Pro',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-              title: AutoSizeText(
-                NewTask.taskForChange != null
-                    ? 'editTask_title'.tr
-                    : 'newTask_title'.tr,
-                minFontSize: 10,
-                maxLines: 1,
-                style: GoogleFonts.roboto(
-                  color: Colors.black87,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
+            ],
+          ),
+          body: ListView(
+            children: [
+              Obx(
+                () => Visibility(
+                  visible: !appController.isHomeworksPro.value,
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        left: 15.0, right: 15.0, bottom: 15.0),
+                    decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.2),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 255, 164, 0),
+                            width: 2.5),
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: AutoSizeText(
+                        'newTask_notConnectedHomeworksProWarning'.tr,
+                        minFontSize: 10,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.roboto(
+                            color: Colors.black87.withOpacity(0.7),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              actions: [
-                appController.isHomeworksPro.value &&
-                        NewTask.taskForChange != null
-                    ? Container()
-                    : Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: SizedBox(
-                          height: 30.0,
-                          width: 120.0,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 5,
-                              backgroundColor:
-                                  const Color.fromARGB(255, 255, 164, 0),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                            ),
-                            onPressed: () {
-                              Get.to(() => const SubcriptionOverview());
-                            },
-                            child: AutoSizeText(
-                              'Homeworks Pro',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.roboto(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-              ],
-            ),
-            body: ListView(
-              children: [
-                Obx(
-                  () => Visibility(
-                    visible: !appController.isHomeworksPro.value,
-                    child: Container(
-                      margin: const EdgeInsets.only(
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
                           left: 15.0, right: 15.0, bottom: 15.0),
-                      decoration: BoxDecoration(
-                          color: Colors.orange.withOpacity(0.2),
-                          border: Border.all(
-                              color: const Color.fromARGB(255, 255, 164, 0),
-                              width: 2.5),
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: AutoSizeText(
-                          'newTask_notConnectedHomeworksProWarning'.tr,
-                          minFontSize: 10,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.roboto(
-                              color: Colors.black87.withOpacity(0.7),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700),
+                      child: TextField(
+                        controller: titleController,
+                        style: GoogleFonts.roboto(
+                          color: pickerColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15.0, bottom: 15.0),
-                        child: TextField(
-                          controller: titleController,
-                          style: GoogleFonts.roboto(
-                            color: pickerColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          decoration: InputDecoration(
-                              hintText: 'newTask_textFieldSubject'.tr,
-                              hintStyle: GoogleFonts.roboto(
-                                color: Colors.black87.withOpacity(0.5),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 2.0,
-                                      color: Colors.black87.withOpacity(0.4))),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 2.5,
-                                      color: Colors.black87.withOpacity(0.6)))),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(right: 5.0, bottom: 15.0),
-                          child: IconButton(
-                              padding: EdgeInsets.zero,
-                              splashRadius: 25.0,
-                              onPressed: () async {
-                                await showColorPicker();
-                              },
-                              icon: Icon(
-                                Icons.color_lens_outlined,
-                                size: 35,
-                                color: pickerColor,
-                              )),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(right: 15.0, bottom: 15.0),
-                          child: IconButton(
-                              padding: EdgeInsets.zero,
-                              splashRadius: 25.0,
-                              onPressed: () async {
-                                dismissKeyboardFocus();
-                                await modalBottomSheetSubjects();
-                              },
-                              icon: FaIcon(
-                                FontAwesomeIcons.bars,
-                                size: 30,
-                                color: Colors.grey.shade800,
-                              )),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 15.0, right: 15.0, bottom: 15.0),
-                  child: SizedBox(
-                    height: 200,
-                    child: TextField(
-                      controller: taskController,
-                      expands: true,
-                      minLines: null,
-                      maxLines: null,
-                      textAlignVertical: TextAlignVertical.top,
-                      style: GoogleFonts.roboto(
-                        color: Colors.black87.withOpacity(0.7),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      decoration: InputDecoration(
-                          hintText: 'newTask_textFieldTask'.tr,
-                          hintStyle: GoogleFonts.roboto(
-                            color: Colors.black87.withOpacity(0.5),
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(
-                                  width: 2.0,
-                                  color: Colors.black87.withOpacity(0.4))),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(
-                                  width: 2.5,
-                                  color: Colors.black87.withOpacity(0.6)))),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 15.0, right: 15.0, bottom: 15.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Colors.black87.withOpacity(0.4), width: 2.5),
-                      borderRadius: BorderRadius.circular(15.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, top: 5.0, bottom: 5.0, right: 5.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const FaIcon(FontAwesomeIcons.solidFlag,
-                                size: 20.0, color: Colors.green),
-                            const SizedBox(width: 10.0),
-                            Text(
-                              '${'newTask_date'.tr} ${DateFormat.MMMMd(ui.window.locale.toString()).format(selectedDate!)}',
-                              style: GoogleFonts.roboto(
-                                  color: Colors.black87.withOpacity(0.7),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
+                        decoration: InputDecoration(
+                            hintText: 'newTask_textFieldSubject'.tr,
+                            hintStyle: GoogleFonts.roboto(
+                              color: Colors.black87.withOpacity(0.5),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
                             ),
-                          ],
-                        ),
-                        IconButton(
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 2.0,
+                                    color: Colors.black87.withOpacity(0.4))),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 2.5,
+                                    color: Colors.black87.withOpacity(0.6)))),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(right: 5.0, bottom: 15.0),
+                        child: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: 25.0,
+                            onPressed: () async {
+                              await showColorPicker();
+                            },
+                            icon: Icon(
+                              Icons.color_lens_outlined,
+                              size: 35,
+                              color: pickerColor,
+                            )),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(right: 15.0, bottom: 15.0),
+                        child: IconButton(
                             padding: EdgeInsets.zero,
                             splashRadius: 25.0,
                             onPressed: () async {
                               dismissKeyboardFocus();
-
-                              DateTime? date = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate ?? DateTime.now(),
-                                firstDate: DateTime(2022),
-                                lastDate: DateTime(2100),
-                                locale: Get.locale,
-                                helpText: 'newTask_datePicker_helpText'.tr,
-                                cancelText: 'newTask_datePicker_cancelText'.tr,
-                                confirmText:
-                                    'newTask_datePicker_confirmText'.tr,
-                                fieldLabelText:
-                                    'newTask_datePicker_fieldLabelText'.tr,
-                                fieldHintText:
-                                    'newTask_datePicker_fieldHintText'.tr,
-                              );
-
-                              selectedDate = date ?? selectedDate;
-
-                              setState(() {});
+                              await modalBottomSheetSubjects();
                             },
-                            icon: const FaIcon(
-                                FontAwesomeIcons.solidCalendarDays,
-                                color: Colors.indigoAccent,
-                                size: 30)),
-                      ],
+                            icon: FaIcon(
+                              FontAwesomeIcons.bars,
+                              size: 30,
+                              color: Colors.grey.shade800,
+                            )),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, bottom: 15.0),
+                child: SizedBox(
+                  height: 200,
+                  child: TextField(
+                    controller: taskController,
+                    expands: true,
+                    minLines: null,
+                    maxLines: null,
+                    textAlignVertical: TextAlignVertical.top,
+                    style: GoogleFonts.roboto(
+                      color: Colors.black87.withOpacity(0.7),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                     ),
+                    decoration: InputDecoration(
+                        hintText: 'newTask_textFieldTask'.tr,
+                        hintStyle: GoogleFonts.roboto(
+                          color: Colors.black87.withOpacity(0.5),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide(
+                                width: 2.0,
+                                color: Colors.black87.withOpacity(0.4))),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide(
+                                width: 2.5,
+                                color: Colors.black87.withOpacity(0.6)))),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 15.0, right: 15.0, bottom: 15.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Colors.black87.withOpacity(0.4), width: 2.5),
-                      borderRadius: BorderRadius.circular(15.0)),
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, bottom: 15.0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.black87.withOpacity(0.4), width: 2.5),
+                    borderRadius: BorderRadius.circular(15.0)),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15.0, top: 5.0, bottom: 5.0, right: 5.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const FaIcon(FontAwesomeIcons.solidFlag,
+                              size: 20.0, color: Colors.green),
+                          const SizedBox(width: 10.0),
+                          Text(
+                            '${'newTask_date'.tr} ${DateFormat.MMMMd(ui.window.locale.toString()).format(selectedDate!)}',
+                            style: GoogleFonts.roboto(
+                                color: Colors.black87.withOpacity(0.7),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          splashRadius: 25.0,
+                          onPressed: () async {
+                            dismissKeyboardFocus();
+
+                            DateTime? date = await showDatePicker(
+                              context: context,
+                              initialDate: selectedDate ?? DateTime.now(),
+                              firstDate: DateTime(2022),
+                              lastDate: DateTime(2100),
+                              locale: Get.locale,
+                            );
+
+                            selectedDate = date ?? selectedDate;
+
+                            setState(() {});
+                          },
+                          icon: const FaIcon(FontAwesomeIcons.solidCalendarDays,
+                              color: Colors.indigoAccent, size: 30)),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, bottom: 15.0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.black87.withOpacity(0.4), width: 2.5),
+                    borderRadius: BorderRadius.circular(15.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 15.0, bottom: 15.0, left: 15.0),
+                      child: Row(
+                        children: [
+                          const FaIcon(FontAwesomeIcons.solidStar,
+                              size: 20.0, color: Colors.orange),
+                          const SizedBox(width: 10.0),
+                          AutoSizeText(
+                            'newTask_ImportantTask'.tr,
+                            maxLines: 2,
+                            style: GoogleFonts.roboto(
+                                color: Colors.black87.withOpacity(0.7),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 8.0, top: 8.0, bottom: 8.0),
+                      child: FlutterSwitch(
+                        activeColor: Colors.green,
+                        width: 85.0,
+                        height: 40.0,
+                        toggleSize: 30.0,
+                        value: isImportantTaskEnable,
+                        borderRadius: 30.0,
+                        padding: 6.0,
+                        onToggle: (val) {
+                          setState(() {
+                            isImportantTaskEnable = val;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, bottom: 15.0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Colors.black87.withOpacity(0.4), width: 2.5),
+                    borderRadius: BorderRadius.circular(15.0)),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top: 15.0, bottom: 15.0, left: 15.0),
+                        padding: const EdgeInsets.only(left: 15.0),
                         child: Row(
                           children: [
-                            const FaIcon(FontAwesomeIcons.solidStar,
-                                size: 20.0, color: Colors.orange),
+                            const FaIcon(FontAwesomeIcons.solidBell,
+                                size: 20.0, color: Colors.redAccent),
                             const SizedBox(width: 10.0),
                             AutoSizeText(
-                              'newTask_ImportantTask'.tr,
+                              '${'newTask_Remind'.tr}:',
                               maxLines: 2,
                               style: GoogleFonts.roboto(
                                   color: Colors.black87.withOpacity(0.7),
@@ -450,19 +487,18 @@ class _NewTaskState extends State<NewTask> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            right: 8.0, top: 8.0, bottom: 8.0),
+                        padding: const EdgeInsets.only(right: 8.0),
                         child: FlutterSwitch(
                           activeColor: Colors.green,
                           width: 85.0,
                           height: 40.0,
                           toggleSize: 30.0,
-                          value: isImportantTaskEnable,
+                          value: isNotificationEnable,
                           borderRadius: 30.0,
                           padding: 6.0,
                           onToggle: (val) {
                             setState(() {
-                              isImportantTaskEnable = val;
+                              isNotificationEnable = val;
                             });
                           },
                         ),
@@ -470,274 +506,229 @@ class _NewTaskState extends State<NewTask> {
                     ],
                   ),
                 ),
-                Container(
+              ),
+              Visibility(
+                visible: isNotificationEnable,
+                child: Container(
                   margin: const EdgeInsets.only(
                       left: 15.0, right: 15.0, bottom: 15.0),
                   decoration: BoxDecoration(
                       border: Border.all(
                           color: Colors.black87.withOpacity(0.4), width: 2.5),
                       borderRadius: BorderRadius.circular(15.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
-                          child: Row(
-                            children: [
-                              const FaIcon(FontAwesomeIcons.solidBell,
-                                  size: 20.0, color: Colors.redAccent),
-                              const SizedBox(width: 10.0),
-                              AutoSizeText(
-                                '${'newTask_Remind'.tr}:',
-                                maxLines: 2,
-                                style: GoogleFonts.roboto(
-                                    color: Colors.black87.withOpacity(0.7),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: FlutterSwitch(
-                            activeColor: Colors.green,
-                            width: 85.0,
-                            height: 40.0,
-                            toggleSize: 30.0,
-                            value: isNotificationEnable,
-                            borderRadius: 30.0,
-                            padding: 6.0,
-                            onToggle: (val) {
-                              setState(() {
-                                isNotificationEnable = val;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: isNotificationEnable,
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                        left: 15.0, right: 15.0, bottom: 15.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.black87.withOpacity(0.4), width: 2.5),
-                        borderRadius: BorderRadius.circular(15.0)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
-                              child: AutoSizeText(
-                                '${DateFormat.MMMMd(ui.window.locale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
-                                minFontSize: 10,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.roboto(
-                                    color: Colors.black87.withOpacity(0.7),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
-                              ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: AutoSizeText(
+                              '${DateFormat.MMMMd(ui.window.locale.toString()).format(selectedDateNotification!)} ${'newTask_timeAt'.tr} ${selectedTimeNotification!.hour.toString().padLeft(2, '0')}:${selectedTimeNotification!.minute.toString().padLeft(2, '0')}',
+                              minFontSize: 10,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.roboto(
+                                  color: Colors.black87.withOpacity(0.7),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
                             ),
-                            Padding(
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right: 12.0, top: 5.0, bottom: 5.0),
+                            child: SizedBox(
+                              height: 50,
+                              width: 35,
+                              child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  splashRadius: 25.0,
+                                  onPressed: () async {
+                                    dismissKeyboardFocus();
+                                    selectDateAndTime(context);
+                                  },
+                                  icon: const FaIcon(
+                                      FontAwesomeIcons.solidCalendarDays,
+                                      color: Colors.indigoAccent,
+                                      size: 30)),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Obx(
+                        () => Visibility(
+                          visible: !appController.isHomeworksPro.value,
+                          child: Padding(
                               padding: const EdgeInsets.only(
-                                  right: 12.0, top: 5.0, bottom: 5.0),
-                              child: SizedBox(
-                                height: 50,
-                                width: 35,
-                                child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    splashRadius: 25.0,
-                                    onPressed: () async {
-                                      dismissKeyboardFocus();
-                                      selectDateAndTime(context);
-                                    },
-                                    icon: const FaIcon(
-                                        FontAwesomeIcons.solidCalendarDays,
-                                        color: Colors.indigoAccent,
-                                        size: 30)),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Obx(
-                          () => Visibility(
-                            visible: !appController.isHomeworksPro.value,
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15.0, right: 15.0, bottom: 15.0),
-                                child: AutoSizeText(
-                                  'newTask_Warning'.tr,
-                                  maxLines: 2,
-                                  minFontSize: 5,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.roboto(
-                                      color: Colors.black87.withOpacity(0.4),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                )),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 15.0, right: 15.0, bottom: 15.0),
-                  child: SizedBox(
-                    height: 60,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 5,
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                                  left: 15.0, right: 15.0, bottom: 15.0),
+                              child: AutoSizeText(
+                                'newTask_Warning'.tr,
+                                maxLines: 2,
+                                minFontSize: 5,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    color: Colors.black87.withOpacity(0.4),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700),
+                              )),
                         ),
                       ),
-                      onPressed: () async {
-                        if (!appController.isHomeworksPro.value) {
-                          if (NewTask.taskForChange == null) {
-                            if (getNumberOfRemainingTasks() == 0) {
-                              Get.to(() => const SubcriptionOverview());
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, bottom: 15.0),
+                child: SizedBox(
+                  height: 60,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (!appController.isHomeworksPro.value) {
+                        if (NewTask.taskForChange == null) {
+                          if (getNumberOfRemainingTasks() == 0) {
+                            Get.to(() => const SubcriptionOverview());
 
-                              dialog(
-                                  title: 'notification_TitleError'.tr,
-                                  content:
-                                      'newTask_notConnectedHomeworksProWarning'
-                                          .tr,
-                                  isError: true);
-
-                              return;
-                            }
-                          }
-
-                          if (isNotificationEnable) {
-                            if (getNumberOfRemainingNotifications() == 0) {
-                              Get.to(() => const SubcriptionOverview());
-
-                              dialog(
-                                  title: 'notification_TitleError'.tr,
-                                  content:
-                                      'newTask_notConnectedHomeworksProWarning'
-                                          .tr,
-                                  isError: true);
-
-                              return;
-                            }
-                          }
-                        }
-
-                        if (titleController.text.isEmpty) {
-                          dialog(
-                              title: 'notification_TitleError'.tr,
-                              content: 'newTask_subjectEmpty'.tr,
-                              isError: true);
-                          return;
-                        }
-
-                        if (taskController.text.isEmpty) {
-                          dialog(
-                              title: 'notification_TitleError'.tr,
-                              content: 'newTask_taskEmpty'.tr,
-                              isError: true);
-                          return;
-                        }
-
-                        int noticeID = isNotificationEnable
-                            ? Random().nextInt(100000000) +
-                                DateTime.now().year +
-                                DateTime.now().month +
-                                DateTime.now().day +
-                                DateTime.now().hour +
-                                DateTime.now().minute +
-                                DateTime.now().second +
-                                DateTime.now().millisecond
-                            : 0;
-
-                        dismissKeyboardFocus();
-
-                        if (isNotificationEnable) {
-                          DateTime dateTimeCreatedAt = DateTime(
-                              selectedDateNotification!.year,
-                              selectedDateNotification!.month,
-                              selectedDateNotification!.day,
-                              selectedTimeNotification!.hour,
-                              selectedTimeNotification!.minute);
-
-                          final differenceInDays = DateTime.now()
-                              .difference(dateTimeCreatedAt)
-                              .inSeconds;
-
-                          if (differenceInDays >= 0) {
                             dialog(
                                 title: 'notification_TitleError'.tr,
-                                content: 'newTask_notificationPastTime'.tr,
+                                content:
+                                    'newTask_notConnectedHomeworksProWarning'
+                                        .tr,
                                 isError: true);
+
                             return;
                           }
                         }
 
-                        addNewTask(
-                            isImportantTaskEnable: isImportantTaskEnable,
-                            isNotificationEnable: isNotificationEnable,
-                            noticeID: noticeID,
-                            selectedDate: selectedDate!,
-                            titleController: titleController,
-                            taskController: taskController,
-                            selectedDateNotification: selectedDateNotification!,
-                            selectedTimeNotification: selectedTimeNotification!,
-                            pickerColor: pickerColor);
+                        if (isNotificationEnable) {
+                          if (getNumberOfRemainingNotifications() == 0) {
+                            Get.to(() => const SubcriptionOverview());
 
-                        setState(() {});
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                            dialog(
+                                title: 'notification_TitleError'.tr,
+                                content:
+                                    'newTask_notConnectedHomeworksProWarning'
+                                        .tr,
+                                isError: true);
+
+                            return;
+                          }
+                        }
+                      }
+
+                      if (titleController.text.isEmpty) {
+                        dialog(
+                            title: 'notification_TitleError'.tr,
+                            content: 'newTask_subjectEmpty'.tr,
+                            isError: true);
+                        return;
+                      }
+
+                      if (taskController.text.isEmpty) {
+                        dialog(
+                            title: 'notification_TitleError'.tr,
+                            content: 'newTask_taskEmpty'.tr,
+                            isError: true);
+                        return;
+                      }
+
+                      int noticeID = isNotificationEnable
+                          ? Random().nextInt(100000000) +
+                              DateTime.now().year +
+                              DateTime.now().month +
+                              DateTime.now().day +
+                              DateTime.now().hour +
+                              DateTime.now().minute +
+                              DateTime.now().second +
+                              DateTime.now().millisecond
+                          : 0;
+
+                      dismissKeyboardFocus();
+
+                      if (isNotificationEnable) {
+                        DateTime dateTimeCreatedAt = DateTime(
+                            selectedDateNotification!.year,
+                            selectedDateNotification!.month,
+                            selectedDateNotification!.day,
+                            selectedTimeNotification!.hour,
+                            selectedTimeNotification!.minute);
+
+                        final differenceInDays = DateTime.now()
+                            .difference(dateTimeCreatedAt)
+                            .inSeconds;
+
+                        if (differenceInDays >= 0) {
+                          dialog(
+                              title: 'notification_TitleError'.tr,
+                              content: 'newTask_notificationPastTime'.tr,
+                              isError: true);
+                          return;
+                        }
+                      }
+
+                      addNewTask(
+                          isImportantTaskEnable: isImportantTaskEnable,
+                          isNotificationEnable: isNotificationEnable,
+                          noticeID: noticeID,
+                          selectedDate: selectedDate!,
+                          title: titleController.text,
+                          task: taskController.text,
+                          selectedDateNotification: selectedDateNotification!,
+                          selectedTimeNotification: selectedTimeNotification!,
+                          pickerColor: pickerColor,
+                          context: context);
+
+                      titleController.clear();
+                      taskController.clear();
+
+                      isNotificationEnable = false;
+                      isImportantTaskEnable = false;
+
+                      setState(() {});
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        NewTask.taskForChange != null
+                            ? const FaIcon(FontAwesomeIcons.solidPenToSquare,
+                                color: Colors.white, size: 25)
+                            : const FaIcon(FontAwesomeIcons.plus,
+                                color: Colors.white, size: 25),
+                        const SizedBox(width: 10.0),
+                        Text(
                           NewTask.taskForChange != null
-                              ? const FaIcon(FontAwesomeIcons.solidPenToSquare,
-                                  color: Colors.white, size: 25)
-                              : const FaIcon(FontAwesomeIcons.plus,
-                                  color: Colors.white, size: 25),
-                          const SizedBox(width: 10.0),
-                          Text(
-                            NewTask.taskForChange != null
-                                ? 'taskList_ButtonChangeTask'.tr
-                                : 'newTask_buttonAdd'.tr,
-                            style: GoogleFonts.roboto(
-                                fontSize: 25,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
+                              ? 'taskList_ButtonChangeTask'.tr
+                              : 'newTask_buttonAdd'.tr,
+                          style: GoogleFonts.roboto(
+                              fontSize: 25,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Obx(
-                  () => appController.isHomeworksPro.value
-                      ? Container(height: 0.0)
-                      : const Padding(
-                          padding: EdgeInsets.only(bottom: 15.0),
-                          child: AppodealBanner(
-                              adSize: AppodealBannerSize.BANNER,
-                              placement: "default"),
-                        ),
-                )
-              ],
-            ),
+              ),
+              Obx(
+                () => appController.isHomeworksPro.value
+                    ? Container(height: 0.0)
+                    : const Padding(
+                        padding: EdgeInsets.only(bottom: 15.0),
+                        child: AppodealBanner(
+                            adSize: AppodealBannerSize.BANNER,
+                            placement: "default"),
+                      ),
+              )
+            ],
           ),
         ),
       ),

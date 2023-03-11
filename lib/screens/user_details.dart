@@ -66,7 +66,7 @@ Future modalBottomSheetUserDetails() async {
                         ),
                         const SizedBox(height: 5.0),
                         AutoSizeText(
-                          '${'profile_subscriptionTitle'.tr}: ${appController.isHomeworksPro.value ? '${'profile_subscriptionActiveUntil'.tr} ${DateFormat.MMMMd(ui.window.locale.toString()).format(appController.subscriptionExpirationDate)}' : 'profile_subscriptionNotActive'.tr}',
+                          '${'profile_subscriptionTitle'.tr}: ${appController.isHomeworksPro.value ? '${'profile_subscriptionActiveUntil'.tr} ${DateFormat.yMMMMd(ui.window.locale.toString()).format(appController.subscriptionExpirationDate)}' : 'profile_subscriptionNotActive'.tr}',
                           minFontSize: 10,
                           maxLines: 1,
                           style: GoogleFonts.roboto(

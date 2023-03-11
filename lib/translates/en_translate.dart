@@ -21,19 +21,13 @@ class EnTranslations {
             'Your subscription will end in 24 hours.',
         'newTask_notificationTaskAdded': 'Task added!',
         'newTask_notificationTaskChanged': 'Task edited!',
+        'newTask_notificationTaskCreatedAgain':
+            'The task has been successfully created again!',
         'newTask_notificationPastTime':
             'The assignment must be in the future tense!',
         'newTask_taskEmpty': 'You didn\'t write the assignment!',
         'newTask_subjectEmpty': 'You did not write the name of the subject!',
         'newTask_timeAt': 'at',
-        'newTask_datePicker_helpText': 'Pick a date',
-        'newTask_datePicker_cancelText': 'Cancel',
-        'newTask_datePicker_confirmText': 'Confirm',
-        'newTask_datePicker_fieldLabelText': 'Write the date',
-        'newTask_datePicker_fieldHintText': 'MM/DD/YYYY',
-        'newTask_timePicker_helpText': 'Pick a time',
-        'newTask_timePicker_minuteLabelText': 'Minutes',
-        'newTask_timePicker_hourLabelText': 'Hours',
         'newTask_remainingTasks': 'Remaining',
         'newTask_notConnectedHomeworksProWarning':
             'As you do not have Homeworks Pro connected, you can only add 5 tasks and 3 reminders per date.',
@@ -99,6 +93,7 @@ class EnTranslations {
         'proOverview_newFeauteresSubtitle':
             'You will be one of the first to test new features!',
         'proOverview_month': 'month',
+        'proOverview_year': 'year',
         'proOverview_buttonConnect': 'Connect',
         'proOverview_userAgreementWarn': 'By connecting, you agree to the',
         'proOverview_userAgreement': 'User Agreement',
@@ -107,6 +102,7 @@ class EnTranslations {
             'You have successfully connected Homeworks Pro!',
         'proOverview_notificationErrorCanceled':
             'The purchase could not be completed. Please try again later. {cancelled}',
+        'proOverview_profitablePrice': 'Profitable',
         'taskDetail_title': 'Reminder',
         'profile_title': 'Your profile',
         'profile_accountTitle': 'Account',
@@ -130,5 +126,7 @@ class EnTranslations {
         'login_textInputPassword': 'Password...',
         'login_textWarning':
             'Payment receipts will be sent to this email address.',
+        'payment_subtitle': 'Pro app version',
+        'payment_description': 'Payment order on',
       };
 }
